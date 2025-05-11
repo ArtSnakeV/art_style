@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Account(models.Model):
-    id = models.AutoField(primary_key=True) # Id
+    id = models.BigAutoField(primary_key=True) # Id
     account_type = models.CharField(50)
     account_number = models.CharField(50)
 

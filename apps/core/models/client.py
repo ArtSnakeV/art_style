@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import DateField
 
+from . import Address
 from .validators.validators import validate_not_future # import with using `.` по суті - це відносний імпорт
 
 class Gender(models.IntegerChoices):
@@ -29,15 +30,15 @@ class Client(models.Model):
     email = models.EmailField()
     gender = models.IntegerField(choices=Gender.choices) # Обираємо всі варіанти з `Gender.choices`
 
-    # Address field
-
-
     # Додаткові поля
     photo = models.ImageField() # field to save image of person
     
     # Метадані
     created_at = models.DateTimeField(auto_now_add=True) # При створенні чи передачі даних моделі дата і час будуть записуватись в це поле
     updated_at = models.DateTimeField(auto_now=True)
+
+    # Address field
+    address = models.ForeignKey(Address, on_delete=models.CASCADE, related_name='addresses')
 
     # Методи
     def __str__(self):

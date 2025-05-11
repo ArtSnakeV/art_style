@@ -1,7 +1,7 @@
 from django.db import models
 
 class Address(models.Model):
-    id = models.AutoField(primary_key=True)  # Id
+    id = models.BigAutoField(primary_key=True)  # Id
     country = models.CharField(max_length=20)
     region = models.CharField(max_length=20)
     district = models.CharField(max_length=20)
