@@ -27,6 +27,7 @@ class Specialist(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     clients = models.ManyToManyField(Client, related_name='specialists')
+    contacts = models.ManyToManyField('Contact', related_name='workers')
 
     def __str__(self):
         return (f"{self.id} "

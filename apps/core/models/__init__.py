@@ -1,5 +1,5 @@
 # Імпортуємо всі створені сутності:
-from .accounts import Account
+from .account import Account
 from .address import Address
 from .client import Client
 from .contact import Contact

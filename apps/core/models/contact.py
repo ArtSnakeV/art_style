@@ -9,6 +9,8 @@ class Contact(models.Model):
 
     contact_value = models.CharField(max_length=21) # value
 
+    contact_owner = models.ForeignKey("Client, Specialist", on_delete=models.CASCADE, related_name="contacts")
+
     def __str__(self):
         return (f"{self.id} "
                 f"{self.contact_type} "
