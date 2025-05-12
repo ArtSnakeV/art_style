@@ -15,7 +15,7 @@ class Specialist(models.Model):
     email = models.EmailField()
     gender = models.IntegerField(choices=Gender.choices)  # Обираємо всі варіанти з `Gender.choices`
     education = models.TextField() # Worker education, skills and experience
-    speciality = models.ForeignKey(Speciality, on_delete=models.CASCADE, related_name="specialities")
+    specialities = models.ManyToManyField("Speciality", related_name="specialists")
     # Address field
 
     # Додаткові поля
