@@ -15,19 +15,19 @@ class Specialist(models.Model):
     email = models.EmailField()
     gender = models.IntegerField(choices=Gender.choices)  # Обираємо всі варіанти з `Gender.choices`
     education = models.TextField() # Worker education, skills and experience
-    speciality = models.ForeignKey(Speciality, on_delete=models.CASCADE, related_name='specialities')
+    speciality = models.ForeignKey(Speciality, on_delete=models.CASCADE, related_name="specialities")
     # Address field
 
     # Додаткові поля
-    photo = models.ImageField()  # field to save image of person
+    # photo = models.ImageField()  # field to save image of person
 
     # Метадані
     created_at = models.DateTimeField(
         auto_now_add=True)  # При створенні чи передачі даних моделі дата і час будуть записуватись в це поле
     updated_at = models.DateTimeField(auto_now=True)
 
-    clients = models.ManyToManyField(Client, related_name='specialists')
-    contacts = models.ManyToManyField('Contact', related_name='workers')
+    clients = models.ManyToManyField(Client, related_name="specialists")
+    contacts = models.ManyToManyField("Contact", related_name="workers")
 
     def __str__(self):
         return (f"{self.id} "
