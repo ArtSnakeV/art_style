@@ -15,8 +15,22 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+# Added imports below:
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
+    # http://localhost:8000/admin/
     path('admin/', admin.site.urls),
+    # '' http:// localhost:8000/   - root-адреса
+    path('', include('apps.core.urls')), # Перший параметр - адреса, по якій ми переходимо (якщо пусті лапки, то це root адреса проєкту
+                # на сторінку, другий - View, який обробляє сторінку,
+                # також тут може бути псевдонім, який обробляє сторінку
 ]
+
+#!!!!! MEDIA
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# pip install Pillow

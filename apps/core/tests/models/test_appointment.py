@@ -31,8 +31,8 @@ class AppointmentModelTest(TestCase): #TestCase class - клас набір те
             'time_till' : datetime(2025, 9, 20, 14, 0, 0),
             'appointment_details': 'Detailed haircut with washing head, drying and style',
             'price': '300.00',
-            'client': '1',
-            'service': '3',
+            # 'client': '1',
+            # 'service': '3',
             'is_completed': 'True',
         }
         # Створення об'єкта запису, збереження в базу
@@ -69,11 +69,11 @@ class AppointmentModelTest(TestCase): #TestCase class - клас набір те
         """Перевірка, що запис оновлюється коректно"""
         self.appointment.time_from = datetime(2025, 9, 20, 12, 0, 0)
         self.appointment.time_till = datetime(2025, 9, 20, 14, 0, 0)
-        self.appointment.time_till = 'Detailed haircut with washing head, drying and style'
-        self.appointment.time_till = '300.00'
-        self.appointment.time_till = '1'
-        # self.appointment.time_till = '3'
-        # self.appointment.time_till = 'True'
+        self.appointment.appointment_details = 'Detailed haircut with washing head, drying and style'
+        self.appointment.price = '300.00'
+        # self.appointment.client = '1'
+        # self.appointment.service = '3'
+        # self.appointment.is_completed = 'True'
         self.appointment.save()
 
     def test_delete_appointment(self):
