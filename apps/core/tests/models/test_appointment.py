@@ -4,9 +4,13 @@ import sys
 
 import django
 
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+django.setup()
 
 from datetime import date, datetime
 from random import choices
+from django.utils import timezone
 
 from django.test import TestCase
 
@@ -27,13 +31,15 @@ class AppointmentModelTest(TestCase): #TestCase class - клас набір те
     def setUp(self):
         """"Створення тестового запису перед кожним тестом"""
         self.appointment_data = {
-            'time_from' : datetime(2025, 9, 20, 12, 0, 0),
-            'time_till' : datetime(2025, 9, 20, 14, 0, 0),
+            # 'time_from' : datetime(2025, 9, 20, 12, 0, 0),
+            # 'time_till' : datetime(2025, 9, 20, 14, 0, 0),
+            'time_from': timezone.make_aware(datetime(2025, 9, 20, 12, 0, 0)),
+            'time_till': timezone.make_aware(datetime(2025, 9, 20, 14, 0, 0)),
             'appointment_details': 'Detailed haircut with washing head, drying and style',
-            'price': '300.00',
+            'price': 300.00,
+            'is_completed': True,
             # 'client': '1',
             # 'service': '3',
-            'is_completed': 'True',
         }
         # Створення об'єкта запису, збереження в базу
         self.appointment = Appointment.objects.create(**self.appointment_data) # Спосіб збереження запису в базу даних
@@ -43,12 +49,15 @@ class AppointmentModelTest(TestCase): #TestCase class - клас набір те
         appointment = Appointment.objects.get(id=self.appointment.id) # get - метод для тримання запису
         # Перевірка ідентичності через співпадіння полів
         #1
-        self.assertEqual(appointment.time_from, self.appointment_data['time_from'])
-        self.assertEqual(appointment.time_till, self.appointment_data['time_till'])
+        # self.assertEqual(appointment.time_from, self.appointment_data['time_from'])
+        # self.assertEqual(appointment.time_till, self.appointment_data['time_till'])
+        self.assertEqual(appointment.time_from, timezone.make_aware(datetime(2025, 9, 20, 12, 0, 0)))
+        self.assertEqual(appointment.time_till, timezone.make_aware(datetime(2025, 9, 20, 14, 0, 0)))
         self.assertEqual(appointment.appointment_details, self.appointment_data['appointment_details'])
         self.assertEqual(appointment.price, self.appointment_data['price'])
         # self.assertEqual(appointment.client, self.appointment_data['client'])
         # self.assertEqual(appointment.service, self.appointment_data['service'])
+
         self.assertEqual(appointment.is_completed, self.appointment_data['is_completed'])
         #2 коли реалізовано метод __eq__ __hash__ в моделі Appointment
         self.assertEqual(appointment, self.appointment)
@@ -57,23 +66,23 @@ class AppointmentModelTest(TestCase): #TestCase class - клас набір те
     def test_read_appointment(self):
         """Перевірка, що дані запису можна коректно прочитати"""
         appointment = Appointment.objects.get(id=self.appointment.id)
-        self.assertEqual(appointment.time_from, datetime(2025, 9, 20, 12, 0, 0))
-        self.assertEqual(appointment.time_till, datetime(2025, 9, 20, 14, 0, 0))
+        self.assertEqual(appointment.time_from, timezone.make_aware(datetime(2025, 9, 20, 12, 0, 0)))
+        self.assertEqual(appointment.time_till, timezone.make_aware(datetime(2025, 9, 20, 14, 0, 0)))
         self.assertEqual(appointment.appointment_details, 'Detailed haircut with washing head, drying and style')
-        self.assertEqual(appointment.price, '300.00')
+        self.assertEqual(appointment.price, 300.00)
         # self.assertEqual(appointment.client, '1')
         # self.assertEqual(appointment.service, '3')
-        self.assertEqual(appointment.is_completed, 'True')
+        self.assertEqual(appointment.is_completed, True)
 
     def test_update_appointment(self):
         """Перевірка, що запис оновлюється коректно"""
-        self.appointment.time_from = datetime(2025, 9, 20, 12, 0, 0)
-        self.appointment.time_till = datetime(2025, 9, 20, 14, 0, 0)
+        self.appointment.time_from = timezone.make_aware(datetime(2025, 9, 20, 12, 0, 0))
+        self.appointment.time_till = timezone.make_aware(datetime(2025, 9, 20, 14, 0, 0))
         self.appointment.appointment_details = 'Detailed haircut with washing head, drying and style'
-        self.appointment.price = '300.00'
+        self.appointment.price = 300.00
         # self.appointment.client = '1'
         # self.appointment.service = '3'
-        # self.appointment.is_completed = 'True'
+        self.appointment.is_completed = True
         self.appointment.save()
 
     def test_delete_appointment(self):

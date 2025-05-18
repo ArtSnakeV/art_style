@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Clients{% endblock title %}
+{% block content %}
+    
+{# Line Comment #}
+{% comment %} 
+Block
+Comment
+{% endcomment %} 
+
+{% comment %} This comments remain on server and not passed to the User {% endcomment %}
+
+<div class="container">
+    <table class="form-container">
+        <tr>
+            <th>Surname</th>
+            <th>Name</th>
+            <th>Patronymic</th>
+            <th>Email</th>
+            <th>Birthday</th>
+            <th>Gender</th>
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+    </table>
+</div>
+
+
+{% endblock content %}
