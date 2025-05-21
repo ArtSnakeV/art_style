@@ -23,6 +23,7 @@ urlpatterns = [
     path('about/core/', about_core),
 
     path('', RedirectView.as_view(pattern_name='core:clients', permanent=False)),
-
-    path('clients/', views.clients, name='clients'),
+    path('clients/', views.clients, name='clients'), # core:clients
+    path('clients/<int:pk>/', views.ClientDetailUpdateView.as_view(), name='client_detail'), # pk - primary key
+    
 ]
