@@ -3,15 +3,32 @@
 {% block content %}
 
 <div class="container">
-    <form method="post">
+    <h3>Client</h3>
+    <form method="post" class="form-center">
         <table>
             {% csrf_token %}
 <!--        {{client_form.as_p}} {% comment %} as_p means display elements as <p>{% endcomment %}-->
-        {{client_form.as_table}}
+            {{client_form.as_table}}
             <tr>
                 <th></th>
                 <td>
                     <button type="submit" name="submit_client">💾</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<div class="container">
+    <h3>Address</h3>
+    <form method="post"  class="form-center">
+        <table>
+            {% csrf_token %}
+            {{address_form.as_table}}
+            <tr>
+                <th></th>
+                <td>
+                    <button type="submit" name="submit_address">💾</button>
                 </td>
             </tr>
         </table>

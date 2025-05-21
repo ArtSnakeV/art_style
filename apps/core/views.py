@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_http_methods
 
-from apps.core.forms import ClientForm
+from apps.core.forms import ClientForm, AddressForm
 from apps.core.models import Client
 from apps.core.models.client import Gender
 
@@ -58,16 +58,58 @@ def clients(request):
 
 class ClientDetailUpdateView(views.View):
     def get(self, request, pk): # parameter `request` given to make running it as `get`
+        # Спроба отримати клієнта, або помилка
         client = get_object_or_404(Client, pk=pk)
-        print(client)
-        client_form = ClientForm(instance=client)
+        address = getattr(client, 'address', None)
 
+        print(client)
+        # Створення об'єкта форми, з даними client
+        client_form = ClientForm(instance=client, prefix='client') #client-surname
+        address_form = AddressForm(instance=address, prefix='address')
+
+        # Передача форми на сторінку
         context={
             'client_form': client_form,
+            'address_form': address_form,
         }
         return render(request, 'core/pages/client_detail.html', context)
 
     def post(self, request, pk):
-        pass
+        client = get_object_or_404(Client, pk=pk)
+        address = getattr(client, 'address', None)
+
+        client_form = ClientForm(request.POST, instance=client, prefix='client')   # механізм instance дозволяє дістати поля, які не видимі в формі, щоб коректно зберегти дані згодом
+        address_form = AddressForm(request.POST, instance=address, prefix='address')
+
+        if 'submit_client' in request.POST: # Обираємо наш `submit` в post запиті
+            if client_form.is_valid():
+                client_form.save() # Зберігаємо дані прямо через саму форму
+                return redirect('core:client_detail', pk=client.pk)
+            else:
+                print(client_form.errors)
+
+        elif 'submit_address' in request.POST: # Обираємо наш `submit` в post запиті
+            if address_form.is_valid():
+                address = address_form.save() # Зберігаємо дані прямо другої форми
+                client.address = address # Присвоюємо об'єкт адреси полю клієнта
+                client.save() # Зберігаємо дані в клієнті
+
+                return redirect('core:client_detail', pk=client.pk)
+            else:
+                print(address_form.errors)
+
+
+        # Рендер у випадку помилки, залишаємо дані, введені у форму
+        context = {
+            'client_form': client_form,
+            'address_form': address_form,
+        }
+
+        return render(request, 'core/pages/client_detail.html', context)
+
+# icons for ondelete: 🗑️ 💾 ❌ ✖ ⋮
+
+
+
 
 
