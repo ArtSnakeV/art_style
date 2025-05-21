@@ -8,9 +8,10 @@ body{
 .container{
     margin: 20px 0px;
 }
-/* >Header */
+
+
 .header{
-    background: #dddddd;
+    background: #E5E4E2;
     margin: 0 auto;
     padding: 10px;
     height: 30px;
@@ -25,8 +26,8 @@ body{
 .header:last-child{
     margin-right: 0;
 }
-/* <Header */
-/* >Table */
+ 
+
 table{
     width: 100%;
     border-collapse: collapse;
@@ -37,7 +38,7 @@ table{
 table th{
     font-weight: 400;
     padding: 5px;
-    background: #e8e8e8;
+    background: #CCFFE5;
     border: 1px solid #d0d0d0;
 }
 table td{
@@ -50,4 +51,44 @@ table tr td:first-child, table tr th:first-child{
 table tr td:first-child, table tr th:last-child{
     border-right: none;
 }
-/* <Table */
+
+
+.art_style{
+  color: white;
+  padding: 10px;
+  font-size: 3.2vmax;
+  font-weight: bold;
+  font-style: oblique;
+  
+  background: rgb(0, 204, 102);
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  -webkit-transition: background-color 2s ease-out;
+  -moz-transition: background-color 2s ease-out;
+  -o-transition: background-color 2s ease-out;
+  transition: background-color 2s ease-out;
+   border-radius: 5px;
+}
+
+.art_style:hover {
+  background-color: rgb(30, 107, 30);
+  cursor: pointer;
+   border-radius: 7px;
+}
+
+/* Style for the link */
+  .custom-link {
+    color: gray;             /* Grey text color */
+    text-decoration: none;   /* Remove underline */
+    font-family: Arial, sans-serif; /* Nice clean font */
+    font-size: 1.7e;       /* Adjust font size as needed */
+    transition: color 0.3s ease; /* Smooth color transition */
+    font-weight: bolder;
+    cursor: pointer;       /* Pointer cursor on hover */
+  }
+
+  /* Change color to white on hover */
+  .custom-link:hover {
+    color: white;
+  }
