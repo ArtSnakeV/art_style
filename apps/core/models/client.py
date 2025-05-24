@@ -27,6 +27,9 @@ class Client(TimeStampedModel):
 
     # Основні поля
     id = models.AutoField(primary_key=True) # AutoField - тип поля для id
+
+    photo = models.ImageField(upload_to='client_photos/', blank=True, null=True)  # field to save image of person
+
     surname = models.CharField(max_length=21)
     name = models.CharField(max_length=21)
     patronymic = models.CharField(max_length=21)
@@ -34,14 +37,13 @@ class Client(TimeStampedModel):
     email = models.EmailField()
     gender = models.IntegerField(choices=Gender.choices) # Обираємо всі варіанти з `Gender.choices`
 
-    # Додаткові поля
-    # photo = models.ImageField() # field to save image of person
-    
+
     # # Метадані
     # created_at = models.DateTimeField(auto_now_add=True) # При створенні чи передачі даних моделі дата і час будуть записуватись в це поле
     # updated_at = models.DateTimeField(auto_now=True)
 
     # Address field
+    # address = models.OneToOneField("Address", on_delete=models.CASCADE, null=True, blank=True)
     address = models.OneToOneField("Address", on_delete=models.SET_NULL, null=True, blank=True)
     accounts = models.ManyToManyField("Account", related_name="clients")
     contacts = models.ManyToManyField("Contact", related_name="clients")

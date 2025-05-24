@@ -92,3 +92,7 @@ table tr td:first-child, table tr th:last-child{
   .custom-link:hover {
     color: white;
   }
+
+  .contact-form-container{
+    text-align: center;
+  }

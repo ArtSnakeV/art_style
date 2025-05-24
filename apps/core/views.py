@@ -1,4 +1,7 @@
+from contextlib import nullcontext
+
 from django import views
+from django.core.exceptions import ValidationError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_http_methods
@@ -58,6 +61,7 @@ def clients(request):
 
 class ClientDetailUpdateView(views.View):
     def get(self, request, pk): # parameter `request` given to make running it as `get`
+
         # Спроба отримати клієнта, або помилка
         client = get_object_or_404(Client, pk=pk)
         address = getattr(client, 'address', None)
@@ -71,12 +75,26 @@ class ClientDetailUpdateView(views.View):
         context={
             'client_form': client_form,
             'address_form': address_form,
+            'client': client, # Transferring `client` to the page
         }
         return render(request, 'core/pages/client_detail.html', context)
 
     def post(self, request, pk):
         client = get_object_or_404(Client, pk=pk)
         address = getattr(client, 'address', None)
+
+        # Check if delete button was pressed
+        if request.POST.get('action') == 'delete_client':
+            if client.address:
+                client.address.delete() # Deleting
+            client.delete()
+            return redirect('core:clients')  # redirect to clients list or elsewhere
+
+        if request.POST.get('action') == 'delete_address':
+            if address:
+                address.delete()
+            return redirect('core:client_detail', pk=pk)
+
 
         client_form = ClientForm(request.POST, instance=client, prefix='client')   # механізм instance дозволяє дістати поля, які не видимі в формі, щоб коректно зберегти дані згодом
         address_form = AddressForm(request.POST, instance=address, prefix='address')
@@ -90,10 +108,10 @@ class ClientDetailUpdateView(views.View):
 
         elif 'submit_address' in request.POST: # Обираємо наш `submit` в post запиті
             if address_form.is_valid():
+                # client = get_object_or_404(Client, pk=pk)
                 address = address_form.save() # Зберігаємо дані прямо другої форми
                 client.address = address # Присвоюємо об'єкт адреси полю клієнта
                 client.save() # Зберігаємо дані в клієнті
-
                 return redirect('core:client_detail', pk=client.pk)
             else:
                 print(address_form.errors)
@@ -103,9 +121,12 @@ class ClientDetailUpdateView(views.View):
         context = {
             'client_form': client_form,
             'address_form': address_form,
+            'client': client,
         }
 
         return render(request, 'core/pages/client_detail.html', context)
+
+
 
 # icons for ondelete: 🗑️ 💾 ❌ ✖ ⋮
 
