@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_http_methods
 
-from apps.core.forms import ClientForm, AddressForm
+from apps.core.forms import ClientForm, AddressForm, ContactForm
 from apps.core.models import Client
 from apps.core.models.client import Gender
 
@@ -65,17 +65,22 @@ class ClientDetailUpdateView(views.View):
         # Спроба отримати клієнта, або помилка
         client = get_object_or_404(Client, pk=pk)
         address = getattr(client, 'address', None)
+        contact_list = getattr(client, 'contacts', None).all()
 
         print(client)
         # Створення об'єкта форми, з даними client
         client_form = ClientForm(instance=client, prefix='client') #client-surname
         address_form = AddressForm(instance=address, prefix='address')
+        contact_form_list = [ContactForm(instance=contact, prefix=str(i)) for i, contact in contact_list]  # Creating list generator
+        contact_form = ContactForm(prefix='contact')
 
         # Передача форми на сторінку
         context={
             'client_form': client_form,
             'address_form': address_form,
             'client': client, # Transferring `client` to the page
+            'contact_form_list': contact_form_list,
+            'contact_form': contact_form,
         }
         return render(request, 'core/pages/client_detail.html', context)
 
@@ -84,22 +89,24 @@ class ClientDetailUpdateView(views.View):
         address = getattr(client, 'address', None)
 
         # Check if delete button was pressed
-        if request.POST.get('action') == 'delete_client':
+        if 'delete_client' in request.POST:
             if client.address:
-                client.address.delete() # Deleting
+                client.address.delete()  # Deleting
             client.delete()
             return redirect('core:clients')  # redirect to clients list or elsewhere
 
-        if request.POST.get('action') == 'delete_address':
+        if 'delete_address' in request.POST:
             if address:
                 address.delete()
             return redirect('core:client_detail', pk=pk)
 
 
-        client_form = ClientForm(request.POST, instance=client, prefix='client')   # механізм instance дозволяє дістати поля, які не видимі в формі, щоб коректно зберегти дані згодом
+        # Для отримання файлу з форми!!!
+        client_form = ClientForm(request.POST, request.FILES, instance=client, prefix='client')   # механізм instance дозволяє дістати поля, які не видимі в формі, щоб коректно зберегти дані згодом
         address_form = AddressForm(request.POST, instance=address, prefix='address')
 
         if 'submit_client' in request.POST: # Обираємо наш `submit` в post запиті
+            
             if client_form.is_valid():
                 client_form.save() # Зберігаємо дані прямо через саму форму
                 return redirect('core:client_detail', pk=client.pk)
@@ -116,6 +123,27 @@ class ClientDetailUpdateView(views.View):
             else:
                 print(address_form.errors)
 
+
+        elif 'submit_contact' in request.POST: #form for simple adding contact
+            contact_form = ContactForm(request.POST, prefix='contact')
+            if contact_form.is_valid():
+                contact = contact_form.save(commit = False) # We are not saving directly in database jet
+                # contact.client = client
+                contact.save()
+                return redirect ('core:client_detail', pk=client.pk)
+            else:
+                print(address_form.errors)
+
+        # Deleting `contact`
+        elif 'submit_contact_delete' in request.POST:
+            prefix=request.POST.get('submit_contact_delete')
+            contact_list = client.contacts.all() # Getting from database list of contacts
+            try:
+                contact=contact_list[int(prefix)]
+            except (IndexError, ValueError):
+                return redirect('core:client_detail', pk=client.pk)
+            contact.delete()
+            return redirect('core/client_detail', pk=client.pk)
 
         # Рендер у випадку помилки, залишаємо дані, введені у форму
         context = {

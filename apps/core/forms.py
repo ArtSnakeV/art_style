@@ -1,6 +1,6 @@
 from django import forms
 
-from apps.core.models import Client, Address
+from apps.core.models import Client, Address, Contact
 
 
 class ClientForm(forms.ModelForm):
@@ -23,3 +23,9 @@ class AddressForm(forms.ModelForm):
         model = Address
         fields = '__all__'
         # exclude = 'created_at', 'updated_at' #not in our case
+
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = Contact
+        fields = '__all__'
+        # exclude = ['created_at', 'updated_at', 'client '] # not applicable for our case as we don't have such fields
