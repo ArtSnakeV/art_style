@@ -1,5 +1,7 @@
 from django.db import models
 
+# from apps.core.models import Client, Specialist
+
 
 class Contact(models.Model):
 
@@ -8,6 +10,10 @@ class Contact(models.Model):
     contact_type = models.CharField(max_length=21) # phone, telegram, etc
 
     contact_value = models.CharField(max_length=21) # value
+
+    # client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='contacts', null=True)  # Add this line
+    #
+    # specialist = models.ForeignKey(Specialist, on_delete=models.CASCADE, related_name='contacts', null=True)  # Add this line
 
     def __str__(self):
         return (f"{self.id} "

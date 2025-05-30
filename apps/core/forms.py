@@ -29,3 +29,18 @@ class ContactForm(forms.ModelForm):
         model = Contact
         fields = '__all__'
         # exclude = ['created_at', 'updated_at', 'client '] # not applicable for our case as we don't have such fields
+
+
+
+# class ContactForm(forms.ModelForm):
+#     class Meta:
+#         model = Contact
+#         fields = '__all__'
+#         widgets = {
+#             'contact_type': forms.Select(attrs={'class': 'form-control'}),
+#             'contact_value': forms.TextInput(attrs={'class': 'form-control'}),
+#         }
+#         labels = {
+#             'contact_type': 'Type of Contact',
+#             'contact_value': 'Contact Details',
+#         }

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Client Detail{% endblock title %}
 {% block content %}
 
@@ -29,7 +30,7 @@
 
 <div class="container">
     <h3>Address</h3>
-    <form method="post"  class="form-center">
+    <form method="post"  class="form-center" id="address-form" data-url="{% url 'core:address_form' pk=client.id %}">
         <table>
             {% csrf_token %}
             {{address_form.as_table}}
@@ -41,13 +42,18 @@
                     <button type="submit" name="submit_address">💾</button>
                 </td>
             </tr>
+            <tr>
+                <th id="address-response" style="color: green;">
+                </th>
+                <td></td>
+            </tr>
         </table>
     </form>
 </div>
 
 <div class="container">
     <h3>Contacts</h3>
-    <form method="post" class="form-center">
+    <form method="post" class="form-center"  id="contact-form" >
         <table>
             {% csrf_token %}
             {{ contact_form.as_table }}
@@ -60,17 +66,21 @@
 </div>
 
 <div class="contact-form-container">
-    {% for contact_form in client_form_list %}
+    {% for contact_form in contact_form_list %}
         <form method="post">
             {% csrf_token %}
-            <button type="submit" name="submit_contact_delete" value="{{ contact_form.prefix }}">✖</button>
             {{ contact_form.as_p }}
+            <button type="submit" name="submit_contact_delete" value="{{ contact_form.prefix }}">✖</button>
             <button type="submit" name="submit_contact_update" value="{{ contact_form.prefix }}">💾</button>
         </form>
     {% endfor %}
 </div>
 
 {% endblock content %}
+
+{% block scripts %}
+    <script src="{% static 'core/js/client_detail.js' %}"></script>
+{% endblock scripts %}
 
 
 

@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.urls import path
 from django.views.generic import RedirectView
 
@@ -23,7 +24,10 @@ urlpatterns = [
     path('about/core/', about_core),
 
     path('', RedirectView.as_view(pattern_name='core:clients', permanent=False)),
-    path('clients/', views.clients, name='clients'), # core:clients
+    path('clients/', login_required(views.clients), name='clients'), # core:clients
+    # path('clients/', views.clients, name='clients'),  # core:clients
+
     path('clients/<int:pk>/', views.ClientDetailUpdateView.as_view(), name='client_detail'), # pk - primary key
-    
+
+    path('clients/<int:pk>/address-form', views.address_form, name='address_form')
 ]
