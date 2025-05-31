@@ -107,7 +107,10 @@ class ClientDetailUpdateView(LoginRequiredMixin, views.View):
         # Check if delete button was pressed
         if 'delete_client' in request.POST:
             if client.address:
-                client.address.delete()  # Deleting
+                client.address.delete()  # Deleting addresses related with Client
+            contact_list = client.contacts.all() # Getting list of all contacts, related with our Client
+            if len(contact_list)!=0: # Checking if we have any contacts related with our Client
+                contact_list.delete() # Deleting all Client contacts
             client.delete()
             return redirect('core:clients')  # redirect to clients list or elsewhere
 
@@ -145,27 +148,11 @@ class ClientDetailUpdateView(LoginRequiredMixin, views.View):
         elif 'submit_contact' in request.POST:  # form for simple adding contact
             contact_form = ContactForm(request.POST, prefix='contact')
             if contact_form.is_valid():
-                contact = contact_form.save(commit=False)  # We are not saving directly in database jet
+                # contact = contact_form.save(commit=False)  # We are not saving directly in database jet
                 # n_contact = Contact(contact_form.cleaned_data['contact_type'], contact_form.cleaned_data['contact_value'])
                 n_contact = contact_form.save()
                 client.contacts.add(n_contact)
-
-                print(n_contact)
-                # print(client.contacts.all)
-
-                print("Here we are")
-
-
-
-                # contact_list = client.contacts.all()
-                # print(f"Client contact: {contact}")
-                # client.contacts.add(contact)
-                # # contacts_from_client = client.contacts.all().add(contact)
-                # # client.contacts = contacts_from_client
-                # print("Client contact1")
-                # contact.save()
-                # # client.contacts.save()
-                # print("Client contact2")
+                # print(n_contact)
                 return redirect('core:client_detail', pk=client.pk)
             else:
                 print(address_form.errors)

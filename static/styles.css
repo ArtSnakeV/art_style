@@ -10,24 +10,6 @@ body{
 }
 
 
-.header{
-    background: #E5E4E2;
-    margin: 0 auto;
-    padding: 10px;
-    height: 30px;
-    border-radius: 7px;
-}
-.header-el{
-    float: left;
-    margin-right: 17px;
-    text-align: center;
-    font-size: 20px;
-}
-.header:last-child{
-    margin-right: 0;
-}
- 
-
 table{
     width: 100%;
     border-collapse: collapse;
@@ -56,7 +38,7 @@ table tr td:first-child, table tr th:last-child{
 .art_style{
   color: white;
   padding: 10px;
-  font-size: 3.2vmax;
+  font-size: 1.5em;
   font-weight: bold;
   font-style: oblique;
   
@@ -82,7 +64,7 @@ table tr td:first-child, table tr th:last-child{
     color: gray;             /* Grey text color */
     text-decoration: none;   /* Remove underline */
     font-family: Arial, sans-serif; /* Nice clean font */
-    font-size: 1.7e;       /* Adjust font size as needed */
+    font-size: 1.3e;       /* Adjust font size as needed */
     transition: color 0.3s ease; /* Smooth color transition */
     font-weight: bolder;
     cursor: pointer;       /* Pointer cursor on hover */
@@ -96,3 +78,79 @@ table tr td:first-child, table tr th:last-child{
   .contact-form-container{
     text-align: center;
   }
+
+
+
+  /* Reset list styles for ul.nav-left and ul.nav-right */
+.nav-left,
+.nav-right {
+  list-style: none; /* Remove bullets/dots */
+  margin: 0;        /* Remove default margin */
+  padding: 0;       /* Remove default padding */
+  display: flex;    /* Use Flexbox for layout */
+  align-items: center; /* Vertically align items */
+}
+
+/* For the header container, use Flexbox to separate left and right menus */
+.header {
+  display: flex;
+  justify-content: space-between; /* Space between left and right menus */
+  align-items: center;             /* Vertically center items */
+  background: #E5E4E2;
+  margin: 0 auto;
+  padding: 10px;
+  border-radius: 7px;
+}
+
+/* Style individual list items in left menu */
+.nav-left .header-el {
+  margin-right: 17px;
+}
+
+.nav-left .header-el:last-child {
+  margin-right: 0; /* Remove margin from last item */
+}
+
+/* Style individual list items in right menu (if needed) */
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+/* Optional: Add spacing for items in right menu */
+.nav-right li {
+  margin-left: 10px;
+}
+
+/* Style for links */
+.custom-link {
+  color: gray;             /* Grey text color */
+  text-decoration: none;   /* Remove underline */
+  font-family: Arial, sans-serif; /* Nice clean font */
+  font-size: 1.3em;        /* Adjust font size (corrected syntax) */
+  transition: color 0.3s ease; /* Smooth color transition */
+  font-weight: bolder;
+  cursor: pointer;         /* Pointer cursor on hover */
+}
+
+/* Hover effect for links */
+.custom-link:hover {
+  color: white;
+}
+
+/* Optional: Make the header responsive on smaller screens */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column; /* Stack menus vertically */
+    align-items: flex-start; /* Align to start */
+  }
+  .nav-left,
+  .nav-right {
+    flex-direction: column;
+  }
+  /* Add spacing between stacked items if needed */
+  .nav-left .header-el,
+  .nav-right li {
+    margin: 8px 0;
+  }
+}
