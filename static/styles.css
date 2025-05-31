@@ -154,3 +154,8 @@ table tr td:first-child, table tr th:last-child{
     margin: 8px 0;
   }
 }
+
+.face-image{
+    margin: 10px;
+    border-radius: 8px;
+}

@@ -5,7 +5,7 @@
 
 <div class="contact-form-container">
    {% if client.photo %} {# `client` is name of object we transfer here#}
-        <img src="{{ client.photo.url }}" alt="Client Photo" style="max-width:200px;">
+        <img class="face-image" src="{{ client.photo.url }}" alt="Client Photo" style="max-width:200px;">
     {% endif %}
 </div>
 
