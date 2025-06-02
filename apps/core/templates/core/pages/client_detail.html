@@ -14,7 +14,7 @@
     <form method="post" class="form-center" enctype="multipart/form-data">
         <table>
             {% csrf_token %}
-<!--        {{client_form.as_p}} {% comment %} as_p means display elements as <p>{% endcomment %}-->
+<!--                {{client_form.as_p}} {% comment %} as_p means display elements as <p>{% endcomment %}-->
             {{client_form.as_table}}
             <tr>
                 <th>
@@ -75,6 +75,34 @@
         </form>
     {% endfor %}
 </div>
+
+
+
+<div class="container">
+    <h3>Accounts</h3>
+    <form method="post" class="form-center"  id="account-form" >
+        <table>
+            {% csrf_token %}
+            {{ account_form.as_table }}
+            <tr>
+                <th></th>
+                <td><button type="submit" name="submit_account">💾</button></td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<div class="account-form-container">
+    {% for account_form in account_form_list %}
+        <form method="post">
+            {% csrf_token %}
+            {{ account_form.as_p }}
+            <button type="submit" name="submit_account_delete" value="{{ account_form.prefix }}">✖</button>
+            <button type="submit" name="submit_account_update" value="{{ account_form.prefix }}">💾</button>
+        </form>
+    {% endfor %}
+</div>
+
 
 {% endblock content %}
 

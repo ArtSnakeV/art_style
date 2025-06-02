@@ -58,6 +58,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'apps.core.middleware.login_required.LoginRequiredMiddleware', # Add our middleware class to the MIDDLWARE django list
+    'apps.core.middleware.login_required.RoleRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -146,5 +149,4 @@ AUTH_USER_MODEL = 'users.CustomUser'
 #LOGIN_URL = 'login'
 LOGIN_URL = '/accounts/login/' # Вибираємо адресу, або `name` який буде використовуватись для логіна
 LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
-
+LOGOUT_REDIRECT_URL = '/welcome/'

@@ -159,3 +159,7 @@ table tr td:first-child, table tr th:last-child{
     margin: 10px;
     border-radius: 8px;
 }
+
+.account-form-container{
+    text-align: center;
+}

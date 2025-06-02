@@ -20,14 +20,21 @@ urlpatterns = [
     # # Приклад використання вкладеної адреси
     # path('about/core/', about_core),
 
-    path('about/', about_project),
+    path('about/', about_project, name='about_project'),
+
     path('about/core/', about_core),
 
     path('', RedirectView.as_view(pattern_name='core:clients', permanent=False)),
-    path('clients/', login_required(views.clients), name='clients'), # core:clients
-    # path('clients/', views.clients, name='clients'),  # core:clients
+    # path('clients/', login_required(views.clients), name='clients'), # core:clients
+    path('clients/', views.clients, name='clients'),  # core:clients
 
     path('clients/<int:pk>/', views.ClientDetailUpdateView.as_view(), name='client_detail'), # pk - primary key
 
-    path('clients/<int:pk>/address-form', views.address_form, name='address_form')
+    path('clients/<int:pk>/address-form', views.address_form, name='address_form'),
+    path('welcome/', views.welcome, name='welcome'),
+    path('users/', views.RegisterView.as_view(), name='accounts/users'), # Тимчасово перекидаємо на сторінку реєстрації
+
+
+    path('services/', views.services, name='services'),
+
 ]

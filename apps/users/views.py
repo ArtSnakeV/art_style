@@ -7,6 +7,8 @@ from apps.users.forms import CustomUserCreationForm
 
 # Create your views here.
 class RegisterView(generic.CreateView):
-    form_class = CustomUserCreationForm
+    form_class = CustomUserCreationForm # Підключається форма
     template_name = 'registration/register.html'
-    success_url = reverse_lazy('login')
+    # success_url = reverse_lazy('login') # Те, що нам потрібно для обробки успішного входу в реєстрацію
+    success_url = reverse_lazy('core:welcome')  # Те, що нам потрібно для обробки успішного входу в реєстрацію
+

@@ -1,9 +1,12 @@
 import datetime
+from dataclasses import fields
 from datetime import date
+
 
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import DateField
+from django.forms import ClearableFileInput
 
 from . import Address
 from .base_models import TimeStampedModel
@@ -28,7 +31,7 @@ class Client(TimeStampedModel):
     # Основні поля
     id = models.AutoField(primary_key=True) # AutoField - тип поля для id
 
-    photo = models.ImageField(upload_to='client_photos/', blank=True, null=True)  # field to save image of person
+    photo = models.ImageField(upload_to='client_photos/', blank=True, null=True)  # field to save image of person; ClearableFileInput mentioned to delete file after choosing to delete
 
     surname = models.CharField(max_length=21)
     name = models.CharField(max_length=21)

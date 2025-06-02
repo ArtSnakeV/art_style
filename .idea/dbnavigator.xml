@@ -31,16 +31,17 @@
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files>
-      <object connection-id="a6d4db42-1bd6-4dd0-ab29-0c46c88182f1" object-ref="schemas/main/tables/core_contact" />
-    </open-files>
+    <open-files />
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="a6d4db42-1bd6-4dd0-ab29-0c46c88182f1" />
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-actions connection-id="a6d4db42-1bd6-4dd0-ab29-0c46c88182f1" dataset="main.core_account" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="a6d4db42-1bd6-4dd0-ab29-0c46c88182f1" dataset="main.users_customuser_groups" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="a6d4db42-1bd6-4dd0-ab29-0c46c88182f1" dataset="main.auth_group_permissions" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="a6d4db42-1bd6-4dd0-ab29-0c46c88182f1" dataset="main.core_specialist" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="a6d4db42-1bd6-4dd0-ab29-0c46c88182f1" dataset="main.users_customuser_user_permissions" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="a6d4db42-1bd6-4dd0-ab29-0c46c88182f1" dataset="main.core_address" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="a6d4db42-1bd6-4dd0-ab29-0c46c88182f1" dataset="main.auth_user" active-filter-id="" />
     <filter-actions connection-id="a6d4db42-1bd6-4dd0-ab29-0c46c88182f1" dataset="main.core_contact" active-filter-id="EMPTY_FILTER">
@@ -59,6 +60,7 @@
     <filter-actions connection-id="a6d4db42-1bd6-4dd0-ab29-0c46c88182f1" dataset="main.core_client_accounts" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="a6d4db42-1bd6-4dd0-ab29-0c46c88182f1" dataset="main.core_client" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="a6d4db42-1bd6-4dd0-ab29-0c46c88182f1" dataset="main.core_client_contacts" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="a6d4db42-1bd6-4dd0-ab29-0c46c88182f1" dataset="main.auth_permission" active-filter-id="EMPTY_FILTER" />
   </component>
   <component name="DBNavigator.Project.ExecutionManager">
     <retain-sticky-names value="false" />
