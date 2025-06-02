@@ -1,6 +1,6 @@
 from django import forms
 
-from apps.core.models import Client, Address, Contact, Account
+from apps.core.models import Client, Address, Contact, Account, Service
 
 
 class ClientForm(forms.ModelForm):
@@ -37,3 +37,5 @@ class AccountForm(forms.ModelForm):
     class Meta:
         model = Account
         fields = '__all__'
+
+

@@ -36,5 +36,6 @@ urlpatterns = [
 
 
     path('services/', views.services, name='services'),
-
+    # path('services/<int:pk>/service-form', views.address_form, name='service-form'),
+    path('specialities/', views.specialities, name='specialities')
 ]

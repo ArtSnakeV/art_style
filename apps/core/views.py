@@ -11,7 +11,7 @@ from django.views.decorators.http import require_http_methods
 
 from apps.core import forms
 from apps.core.forms import ClientForm, AddressForm, ContactForm, AccountForm
-from apps.core.models import Client, Contact, Service
+from apps.core.models import Client, Contact, Service, Speciality
 from apps.core.models.client import Gender
 
 
@@ -331,29 +331,82 @@ class RegisterView(views.View):
     pass
 
 
-# Services
 @require_http_methods(['GET', 'POST'])
 def services(request):
     # POST
-    # service_title = models.CharField(50)
-    # service_description = models.CharField(50)
-    # service_price= models.DecimalField(max_digits=8, decimal_places=2, default=0)
-
     if request.method == 'POST':
         service_title = request.POST.get('service_title')
         service_description = request.POST.get('service_description')
         service_price = request.POST.get('service_price')
-        # Можна додати валідацію
 
-        Service.objects.create(
-            service_title=service_title,
-            service_description=service_description,
-            service_price=service_price,
-        )
-        return redirect('core:services')
+        # Case when we are adding new object
+        if 'submit_service_create' in request.POST:
+            Service.objects.create(
+                service_title=service_title,
+                service_description=service_description,
+                service_price=service_price,
+            )
+            return redirect('core:services')
+
+        # If pressed `update_button`
+        if 'submit_service_update' in request.POST:
+            print(f"Update pressed.")
+            service_id = request.POST.get('submit_service_update')
+            # Fetch and update the specific service
+            service = Service.objects.get(id=service_id)
+            service.service_title = request.POST.get('service_title')
+            service.service_description = request.POST.get('service_description')
+            service.service_price = request.POST.get('service_price')
+            service.save()
+            return redirect('core:services')
+
+        # If pressed `update_button`
+        if 'submit_service_delete' in request.POST:
+            print(f"Delete pressed.")
+            service_id = request.POST.get('submit_service_delete')
+            Service.objects.get(id=service_id).delete()
+            return redirect('core:services')
 
     # GET
     context = {
-        'service_list': Service.objects.all(),
+        'service_form_list': Service.objects.all(),
     }
     return render(request, 'core/pages/services.html', context)
+
+require_http_methods(['GET', 'POST'])
+def specialities(request):
+    # POST
+    if request.method == 'POST':
+        speciality_name = request.POST.get('speciality_name')
+
+        # Case when we are adding new object
+        if 'submit_speciality_create' in request.POST:
+            print(f"Creating new speciality")
+            Speciality.objects.create(
+                speciality_name=speciality_name,
+            )
+            return redirect('core:specialities')
+
+        # If pressed `update_button`
+        if 'submit_speciality_update' in request.POST:
+            print(f"Update pressed.")
+            speciality_id = request.POST.get('submit_speciality_update')
+            # Fetch and update the specific speciality
+            speciality = Service.objects.get(id=speciality_id)
+            speciality.speciality_name = request.POST.get('speciality_name')
+            speciality.save()
+            return redirect('core:specialities')
+
+        # If pressed `update_button`
+        if 'submit_speciality_delete' in request.POST:
+            print(f"Delete pressed.")
+            speciality_id = request.POST.get('submit_speciality_delete')
+            Speciality.objects.get(id=speciality_id).delete()
+            return redirect('core:speciality')
+
+    # GET
+    context = {
+        'speciality_form_list': Speciality.objects.all(),
+    }
+    return render(request, 'core/pages/specialities.html', context)
+
