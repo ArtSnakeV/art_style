@@ -14,8 +14,8 @@ class Specialist(models.Model):
     birthday = models.DateField(validators=[validate_not_future])
     email = models.EmailField()
     gender = models.IntegerField(choices=Gender.choices)  # Обираємо всі варіанти з `Gender.choices`
-    education = models.TextField() # Worker education, skills and experience
-    specialities = models.ManyToManyField("Speciality", related_name="specialists")
+    education = models.TextField(blank=True, null=True) # Worker education, skills and experience
+    specialities = models.ManyToManyField("Speciality", related_name="specialists",)
     # Address field
 
     # Додаткові поля
@@ -27,7 +27,7 @@ class Specialist(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     clients = models.ManyToManyField(Client, related_name="specialists")
-    contacts = models.ManyToManyField("Contact", related_name="workers")
+    contacts = models.ManyToManyField("Contact", related_name="specialists")
 
     def __str__(self):
         return (f"{self.id} "

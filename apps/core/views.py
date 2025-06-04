@@ -3,6 +3,7 @@ from contextlib import nullcontext
 from django import views
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -10,9 +11,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 from apps.core import forms
-from apps.core.forms import ClientForm, AddressForm, ContactForm, AccountForm
-from apps.core.models import Client, Contact, Service, Speciality
+from apps.core.forms import ClientForm, AddressForm, ContactForm, AccountForm, SpecialistForm
+from apps.core.models import Client, Contact, Service, Speciality, Specialist, Appointment
 from apps.core.models.client import Gender
+
+
+from datetime import datetime
 
 
 # Create your views here.
@@ -35,7 +39,6 @@ def about_core(request):
 def clients(request):
     # POST
     if request.method == 'POST':
-        surname =  request.POST.get('surname')
         name = request.POST.get('name')
         surname = request.POST.get('surname')
         patronymic = request.POST.get('patronymic')
@@ -77,7 +80,7 @@ class ClientDetailUpdateView(views.View):
         # print(f"contacts_qs:{contacts_qs}")
         accounts = client.accounts.all()
 
-        print(client)
+        # print(client)
         # Створення об'єкта форми, з даними client
         client_form = ClientForm(instance=client, prefix='client') #client-surname
         address_form = AddressForm(instance=address, prefix='address')
@@ -107,7 +110,7 @@ class ClientDetailUpdateView(views.View):
             'contact_list': contacts_qs,
             'account_list': accounts,
         }
-        return render(request, 'core/pages/client_detail.html', context)
+        return render(request, 'core/pages/client_details.html', context)
 
     def post(self, request, pk):
         client = get_object_or_404(Client, pk=pk)
@@ -212,7 +215,7 @@ class ClientDetailUpdateView(views.View):
                 # print(n_contact)
                 return redirect('core:client_detail', pk=client.pk)
             else:
-                print(address_form.errors)
+                print(contact_form.errors)
 
         # Deleting `contact`
         elif 'submit_contact_delete' in request.POST:
@@ -300,7 +303,7 @@ class ClientDetailUpdateView(views.View):
             'client': client,
         }
 
-        return render(request, 'core/pages/client_detail.html', context)
+        return render(request, 'core/pages/client_details.html', context)
 
 
 # icons for ondelete: 🗑️ 💾 ❌ ✖ ⋮
@@ -409,4 +412,368 @@ def specialities(request):
         'speciality_form_list': Speciality.objects.all(),
     }
     return render(request, 'core/pages/specialities.html', context)
+
+
+# Specialists
+@require_http_methods(['GET', 'POST'])
+def specialists(request):
+    # POST
+    if request.method == 'POST':
+        surname =  request.POST.get('surname')
+        name = request.POST.get('name')
+        patronymic = request.POST.get('patronymic')
+        email = request.POST.get('email')
+        birthday = request.POST.get('birthday')
+        gender = request.POST.get('gender')
+
+
+        Specialist.objects.create(
+            surname = surname,
+            name = name,
+            patronymic = patronymic,
+            email = email,
+            birthday = birthday,
+            gender = gender
+        )
+
+        return redirect('core:specialists')
+
+
+    # GET
+    context = {
+        'specialist_list': Specialist.objects.all(),
+        'gender_choices': Gender,
+    }
+    return render(request, 'core/pages/specialists.html', context) #
+
+
+# Specialists details
+# class SpecialistDetailUpdateView(LoginRequiredMixin, views.View):
+class SpecialistDetailUpdateView(views.View):
+    def get(self, request, pk): # parameter `request` given to make running it as `get`
+
+        # Спроба отримати спеціаліста, або помилка
+        specialist = get_object_or_404(Specialist, pk=pk)
+        contacts_qs = specialist.contacts.all()
+
+        print(f"specialist:{specialist}")
+        # Створення об'єкта форми, з даними specialist
+        specialist_form = SpecialistForm(instance=specialist, prefix='specialist') #specialist-surname
+        # contact_form_list = [ContactForm(instance=contact, prefix=str(i)) for i, contact in enumerate(contacts_qs)]  # Creating list generator
+        contact_form_list = [
+            ContactForm(instance=contact, prefix=f'contact_{i}')
+            for i, contact in enumerate(contacts_qs)
+        ]
+        contact_form = ContactForm(prefix='contact')
+
+        # Передача форми на сторінку
+        context={
+            'specialist_form': specialist_form,
+            'specialist': specialist, # Transferring `specialist` to the page
+            'contact_form_list': contact_form_list,
+            # 'contact_form_list': contacts_qs,
+            'contact_form': contact_form,
+
+
+            'contact_list': contacts_qs,
+        }
+        return render(request, 'core/pages/specialist_details.html', context)
+
+    def post(self, request, pk):
+        specialist = get_object_or_404(Specialist, pk=pk)
+
+
+        # Check if delete button for specialist was pressed
+        if 'delete_specialist' in request.POST:
+            contact_list = specialist.contacts.all() # Getting list of all contacts, related with our Client
+            if len(contact_list)!=0: # Checking if we have any contacts related with our Client
+                contact_list.delete() # Deleting all Client contacts
+            specialist.delete()
+            return redirect('core:specialists')  # redirect to specialists list or elsewhere
+
+
+        # Для отримання файлу з форми!!!
+        specialist_form = SpecialistForm(request.POST, request.FILES, instance=specialist, prefix='specialist')   # механізм instance дозволяє дістати поля, які не видимі в формі, щоб коректно зберегти дані згодом
+        # contact_form = ContactForm(request.POST, instance = contacts, prefix='contacts' )
+
+        if 'submit_specialist' in request.POST:
+            form = SpecialistForm(request.POST, request.FILES, instance=specialist, prefix='specialist')
+            if form.is_valid():
+                print(request.POST)
+                # Check if the clear checkbox was checked
+                print(form.cleaned_data.get('specialist-photo-clear'))
+                if request.POST.get('specialist-photo-clear'):
+                    print("Inside `specialist-photo-clear`")
+                    print(request.POST.get('photo'))
+                    #Photo already empty in form
+                    # if specialist.photo:
+                        # specialist.photo.delete(save=False)
+                    specialist.photo.delete()
+                    specialist.photo = None
+                # Save form and specialist
+                form.save()
+                specialist.save()
+                return redirect('core:specialist_details', pk=specialist.pk)
+            else:
+                print(form.errors)
+
+        elif 'submit_contact' in request.POST:  # form for simple adding contact
+            contact_form = ContactForm(request.POST, prefix='contact')
+            if contact_form.is_valid():
+                # contact = contact_form.save(commit=False)  # We are not saving directly in database jet
+                # n_contact = Contact(contact_form.cleaned_data['contact_type'], contact_form.cleaned_data['contact_value'])
+                n_contact = contact_form.save()
+                specialist.contacts.add(n_contact)
+                # print(n_contact)
+                return redirect('core:specialist_details', pk=specialist.pk)
+            else:
+                print(contact_form.errors)
+
+        # Deleting `contact`
+        elif 'submit_contact_delete' in request.POST:
+            # print("Delete contact pressed")
+            prefix=request.POST.get('submit_contact_delete')
+            # Let's extract numeric part from prefix
+            index_str = prefix.split('_')[-1]  # '0' as an example
+            index = int(index_str)
+            print(f"our prefix for deleting: {index}")
+            contact_list = specialist.contacts.all() # Getting from database list of contacts
+            try:
+                contact_del=contact_list[index]
+            except (IndexError, ValueError) as e:
+                print(f"An exception occurred: {type(e).__name__}: {e}") # Getting information about our error
+                return redirect('core:specialist_details', pk=specialist.pk)
+            contact_del.delete() # Let's delete mentioned contact
+            return redirect('core:specialist_details', pk=specialist.pk)
+
+        elif 'submit_contact_update' in request.POST:
+            contact_list = specialist.contacts.all()
+            prefix = request.POST.get('submit_contact_update')
+            index = int(prefix.split('_')[-1])  # getting last number from the prefix (id in our contact table for mentioned Client)
+            # Fetch the existing contact
+            existing_contact = contact_list[index]
+            # Bind the form to the existing instance
+            contact_form = ContactForm(request.POST, prefix=prefix, instance=existing_contact)
+
+            if contact_form.is_valid():
+                contact_form.save()
+                return redirect('core:specialist_details', pk=specialist.pk)
+            else:
+                print("Errors occurs while trying to save updated contact.")
+                return redirect('core:specialist_details', pk=specialist.pk)
+        else:
+            print("Errors occurs while trying to save updated contact.")
+            return redirect('core:specialist_details', pk=specialist.pk)
+
+        # Рендер у випадку помилки, залишаємо дані, введені у форму
+        context = {
+            'specialist_form': specialist_form,
+            'specialist': specialist,
+        }
+
+        return render(request, 'core/pages/specialist_details.html', context)
+
+
+# Appointments
+@require_http_methods(['GET', 'POST'])
+def appointments(request):
+    services = Service.objects.all()
+    clients = Client.objects.all()
+    specialists = Specialist.objects.all()
+    appointments = Appointment.objects.all()
+
+    # POST
+    if request.method == 'POST':
+        # # service = request.POST.get('service')
+        # # time_from = request.POST.get('time_from')
+        # # time_till = request.POST.get('time_till')
+        #
+        # time_from_str = request.POST.get('time_from')
+        # time_till_str = request.POST.get('time_till')
+        #
+        # time_from_dt = datetime.strptime(time_from_str, '%Y-%m-%dT%H:%M')
+        # time_till_dt = datetime.strptime(time_till_str, '%Y-%m-%dT%H:%M')
+        #
+        # appointment_details = request.POST.get('appointment_details')
+        # # price = request.POST.get('price')
+        # price = float(request.POST.get('price', 0))
+        # is_completed = request.POST.get('is_completed')
+        # # client = request.POST.get('client')
+        # # specialist = request.POST.get('specialist')
+        #
+        # service_id = request.POST.get('service')
+        # service_obj = Service.objects.get(id=service_id)
+        # client_id = request.POST.get('client')
+        # client_obj = Client.objects.get(id=client_id)
+        # specialist_id = request.POST.get('specialist')
+        # specialist_obj = Specialist.objects.get(id=specialist_id)
+
+
+
+
+        # Case when we are adding new object
+        # if 'submit_appointment_create' in request.POST:
+        #     Appointment.objects.create(
+        #         # service=service,
+        #         # time_from=time_from,
+        #         # time_till=time_till,
+        #         appointment_details=appointment_details,
+        #         price=price,
+        #         is_completed=is_completed,
+        #         # client=client,
+        #         # specialist=specialist,
+        #         service = service_obj,
+        #         client = client_obj,
+        #         specialist = specialist_obj,
+        #         time_from = time_from_dt,
+        #         time_till = time_till_dt,
+        #     )
+        #     print('We are creating new appointment')
+        #     return redirect('core:appointments')
+        if 'submit_appointment_create' in request.POST:
+            service_id = request.POST.get('service')
+            client_id = request.POST.get('client')
+            specialist_id = request.POST.get('specialist')
+
+            service_obj = Service.objects.get(id=service_id)
+            client_obj = Client.objects.get(id=client_id)
+            specialist_obj = Specialist.objects.get(id=specialist_id)
+
+            time_from_str = request.POST.get('time_from')
+            time_till_str = request.POST.get('time_till')
+            time_from_dt = datetime.strptime(time_from_str, '%Y-%m-%dT%H:%M')
+            time_till_dt = datetime.strptime(time_till_str, '%Y-%m-%dT%H:%M')
+
+            price_value = float(request.POST.get('price', 0))
+            appointment_details = request.POST.get('appointment_details')
+            is_completed = False  # default or based on a checkbox
+
+            Appointment.objects.create(
+                service=service_obj,
+                time_from=time_from_dt,
+                time_till=time_till_dt,
+                appointment_details=appointment_details,
+                price=price_value,
+                is_completed=is_completed,
+                client=client_obj,
+                specialist=specialist_obj,
+            )
+            return redirect('core:appointments')
+
+    context = {
+        'services': services,
+        'clients': clients,
+        'specialists': specialists,
+        'appointments': appointments,
+    }
+    return render(request, 'core/pages/appointments.html', context)
+
+
+
+
+# Users
+@require_http_methods(['GET', 'POST'])
+def users(request):
+    # POST
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        is_staff = request.POST.get('is_staff')
+        date_joined = request.POST.get('date_joined')
+
+        User.objects.create(
+            email = email,
+            is_staff = is_staff,
+            date_joined = date_joined,
+        )
+        return redirect('core:users')
+
+    # GET
+    context = {
+        'client_list': User.objects.all(),
+    }
+    return render(request, 'users/registration/users.html', context) #
+
+
+
+@require_http_methods(['GET', 'POST'])
+def admin_appointments(request):
+    services = Service.objects.all()
+    clients = Client.objects.all()
+    specialists = Specialist.objects.all()
+    appointments = Appointment.objects.all()
+
+    # POST
+    if request.method == 'POST':
+
+        if 'submit_appointment_create' in request.POST:
+            service_id = request.POST.get('service')
+            client_id = request.POST.get('client')
+            specialist_id = request.POST.get('specialist')
+
+            service_obj = Service.objects.get(id=service_id)
+            client_obj = Client.objects.get(id=client_id)
+            specialist_obj = Specialist.objects.get(id=specialist_id)
+
+            time_from_str = request.POST.get('time_from')
+            time_till_str = request.POST.get('time_till')
+            time_from_dt = datetime.strptime(time_from_str, '%Y-%m-%dT%H:%M')
+            time_till_dt = datetime.strptime(time_till_str, '%Y-%m-%dT%H:%M')
+
+            price_value = float(request.POST.get('price', 0))
+            appointment_details = request.POST.get('appointment_details')
+            is_completed = False  # default or based on a checkbox
+
+            Appointment.objects.create(
+                service=service_obj,
+                time_from=time_from_dt,
+                time_till=time_till_dt,
+                appointment_details=appointment_details,
+                price=price_value,
+                is_completed=is_completed,
+                client=client_obj,
+                specialist=specialist_obj,
+            )
+            return redirect('core:admin_appointments')
+
+        # If pressed `update_button`
+        if 'submit_appointment_update' in request.POST:
+            appointment_id = request.POST.get('submit_appointment_update')
+            appointment = Appointment.objects.get(id=appointment_id)
+            # Fetch and set service
+            service_id = request.POST.get('service')
+            appointment.service = Service.objects.get(id=service_id)
+            # Update date fields - parse from string
+            time_from_str = request.POST.get('time_from')
+            time_till_str = request.POST.get('time_till')
+            appointment.is_completed = 'is_completed' in request.POST
+            if time_from_str:
+                appointment.time_from = datetime.strptime(time_from_str, '%Y-%m-%dT%H:%M')
+            if time_till_str:
+                appointment.time_till = datetime.strptime(time_till_str, '%Y-%m-%dT%H:%M')
+            # Other fields
+            appointment.appointment_details = request.POST.get('appointment_details')
+            appointment.price = float(request.POST.get('price', 0))
+            # Update foreign keys
+            client_id = request.POST.get('client')
+            specialist_id = request.POST.get('specialist')
+            appointment.client = Client.objects.get(id=client_id)
+            appointment.specialist = Specialist.objects.get(id=specialist_id)
+            # Save changes
+            appointment.save()
+            return redirect('core:admin_appointments')
+
+        # If pressed `delete_button`
+        if 'submit_appointment_delete' in request.POST:
+            print(f"Delete pressed.")
+            appointment_id = request.POST.get('submit_appointment_delete')
+            Appointment.objects.get(id=appointment_id).delete()
+            return redirect('core:admin_appointments')
+
+    context = {
+        'services': services,
+        'clients': clients,
+        'specialists': specialists,
+        'appointments': appointments,
+    }
+    return render(request, 'core/pages/admin_appointments.html', context)
 

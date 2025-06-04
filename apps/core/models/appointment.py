@@ -1,6 +1,6 @@
 from django.db import models
 
-from apps.core.models import Client, Service
+# from apps.core.models import Client, Service, Specialist
 
 
 class Appointment(models.Model):
@@ -11,8 +11,13 @@ class Appointment(models.Model):
     price = models.DecimalField(max_digits=8, decimal_places=2, default=0.0)
     is_completed = models.BooleanField(False)  # Field to know if appointment passed and service completed
 
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='appointments', null=True, blank=True)
-    service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='appointments', null=True, blank=True)
+    client = models.ForeignKey('Client', on_delete=models.CASCADE)
+    specialist = models.ForeignKey('Specialist', on_delete=models.CASCADE)
+    service = models.ForeignKey('Service', on_delete=models.CASCADE)
+    # client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='appointments', null=True, blank=True)
+    # specialist = models.ForeignKey(Specialist, on_delete=models.CASCADE, related_name='appointments', null=True, blank=True)
+    # service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='appointments', null=True, blank=True)
+
 
 
 

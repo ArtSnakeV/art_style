@@ -32,10 +32,17 @@ urlpatterns = [
 
     path('clients/<int:pk>/address-form', views.address_form, name='address_form'),
     path('welcome/', views.welcome, name='welcome'),
-    path('users/', views.RegisterView.as_view(), name='accounts/users'), # Тимчасово перекидаємо на сторінку реєстрації
-
+    # path('users/', views.RegisterView.as_view(), name='accounts/users'), # Тимчасово перекидаємо на сторінку реєстрації
+    path('users/', views.users, name='users'), # Тимчасово перекидаємо на сторінку реєстрації
 
     path('services/', views.services, name='services'),
-    # path('services/<int:pk>/service-form', views.address_form, name='service-form'),
-    path('specialities/', views.specialities, name='specialities')
+
+    path('specialities/', views.specialities, name='specialities'),
+
+
+    path('specialists/', views.specialists, name='specialists'),
+    path('specialists/<int:pk>/', views.SpecialistDetailUpdateView.as_view(), name='specialist_details'), # pk - primary key
+
+    path('appointments/', views.appointments, name='appointments'),
+    path('admin_appointments/', views.admin_appointments, name='admin_appointments')
 ]

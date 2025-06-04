@@ -40,8 +40,8 @@
     <filter-actions connection-id="a6d4db42-1bd6-4dd0-ab29-0c46c88182f1" dataset="main.core_account" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="a6d4db42-1bd6-4dd0-ab29-0c46c88182f1" dataset="main.users_customuser_groups" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="a6d4db42-1bd6-4dd0-ab29-0c46c88182f1" dataset="main.auth_group_permissions" active-filter-id="EMPTY_FILTER" />
-    <filter-actions connection-id="a6d4db42-1bd6-4dd0-ab29-0c46c88182f1" dataset="main.users_customuser_user_permissions" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="a6d4db42-1bd6-4dd0-ab29-0c46c88182f1" dataset="main.core_specialist" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="a6d4db42-1bd6-4dd0-ab29-0c46c88182f1" dataset="main.users_customuser_user_permissions" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="a6d4db42-1bd6-4dd0-ab29-0c46c88182f1" dataset="main.core_address" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="a6d4db42-1bd6-4dd0-ab29-0c46c88182f1" dataset="main.auth_user" active-filter-id="" />
     <filter-actions connection-id="a6d4db42-1bd6-4dd0-ab29-0c46c88182f1" dataset="main.core_contact" active-filter-id="EMPTY_FILTER">
@@ -51,6 +51,7 @@
     </filter-actions>
     <filter-actions connection-id="a6d4db42-1bd6-4dd0-ab29-0c46c88182f1" dataset="main.auth_group" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="a6d4db42-1bd6-4dd0-ab29-0c46c88182f1" dataset="main.core_speciality" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="a6d4db42-1bd6-4dd0-ab29-0c46c88182f1" dataset="main.core_appointment" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="a6d4db42-1bd6-4dd0-ab29-0c46c88182f1" dataset="main.core_service" active-filter-id="EMPTY_FILTER">
       <filter id="6e4587c6-7f7a-4bc7-965d-f7fa366ddc38" name="Filter" temporary="false" custom-name="false" type="basic" join-type="AND">
         <condition column="id" operator="=" value="" active="true" />
