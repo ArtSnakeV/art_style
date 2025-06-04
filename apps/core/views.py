@@ -3,7 +3,9 @@ from contextlib import nullcontext
 from django import views
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model # replaced default user with Custom user
+
 from django.core.exceptions import ValidationError
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -14,7 +16,7 @@ from apps.core import forms
 from apps.core.forms import ClientForm, AddressForm, ContactForm, AccountForm, SpecialistForm
 from apps.core.models import Client, Contact, Service, Speciality, Specialist, Appointment
 from apps.core.models.client import Gender
-
+from django.contrib import messages
 
 from datetime import datetime
 
@@ -670,31 +672,6 @@ def appointments(request):
 
 
 
-
-# Users
-@require_http_methods(['GET', 'POST'])
-def users(request):
-    # POST
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        is_staff = request.POST.get('is_staff')
-        date_joined = request.POST.get('date_joined')
-
-        User.objects.create(
-            email = email,
-            is_staff = is_staff,
-            date_joined = date_joined,
-        )
-        return redirect('core:users')
-
-    # GET
-    context = {
-        'client_list': User.objects.all(),
-    }
-    return render(request, 'users/registration/users.html', context) #
-
-
-
 @require_http_methods(['GET', 'POST'])
 def admin_appointments(request):
     services = Service.objects.all()
@@ -777,3 +754,47 @@ def admin_appointments(request):
     }
     return render(request, 'core/pages/admin_appointments.html', context)
 
+
+# Users
+User = get_user_model()
+@require_http_methods(['GET', 'POST'])
+def user_management(request):
+    if request.method == 'POST':
+        # Handle user update
+        if 'update_user' in request.POST:
+            user_id = request.POST.get('update_user')
+            user = get_object_or_404(User, id=user_id)
+            user.username = request.POST.get(f'username_{user_id}')
+            user.email = request.POST.get(f'email_{user_id}')
+            role = request.POST.get(f'role_{user_id}')
+            # Assign role to user's 'role' field
+            user.role = role
+            user.save()
+            messages.success(request, f'User {user.username} updated.')
+            return redirect('core:user_management')
+
+        # Handle user deletion
+        elif 'delete_user' in request.POST:
+            user_id = request.POST.get('delete_user')
+            user = get_object_or_404(User, id=user_id)
+            user.delete()
+            messages.success(request, f'User {user.username} deleted.')
+            return redirect('core:user_management')
+
+        # Handle adding new user
+        elif 'add_user' in request.POST:
+            username = request.POST.get('new_username')
+            email = request.POST.get('new_email')
+            password = request.POST.get('new_password')
+            role = request.POST.get('new_role')
+            if username and email and password:
+                user = User.objects.create_user(username=username, email=email, password=password)
+                user.role = role
+                user.save()
+                messages.success(request, f'User {username} added.')
+            else:
+                messages.error(request, 'Please fill all fields to add a new user.')
+            return redirect('core:user_management')
+
+    users = User.objects.all()
+    return render(request, 'registration/users.html', {'users': users})
