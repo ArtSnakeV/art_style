@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Services{% endblock title %}
+{% block content %}
+
+
+<div class="container">
+    <form action="{% url 'core:services' %}" method="post" class="form-flex">
+        {% csrf_token %}
+        <input type="text" name="service_title" placeholder="Title">
+        <input type="text" name="service_description" placeholder="Description">
+        <input type="text" name="service_price" placeholder="Price">
+        <button type="submit" name="submit_service_create">💾</button>
+    </form>
+</div>
+
+
+<div class="container">
+    {% for service_form in service_form_list %}
+        <form method="post">
+            {% csrf_token %}
+            {{ service_form.as_p }}
+            <input type="hidden" name="service_pk" value="{{ service.id }}">
+            <input type="text" name="service_title" placeholder="Title" value="{{service_form.service_title}}">
+            <input type="text" name="service_description" placeholder="Description" value="{{service_form.service_description}}">
+            <input type="text" name="service_price" placeholder="Price" value="{{service_form.service_price}}">
+            <button type="submit" name="submit_service_update" value="{{ service_form.id }}">💾</button>
+            <button type="submit" name="submit_service_delete" value="{{ service_form.id }}">✖</button>
+        </form>
+    {% endfor %}
+
+</div>
+
+{% endblock content %}

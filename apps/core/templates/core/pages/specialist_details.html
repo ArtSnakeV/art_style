@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Specialist Detail{% endblock title %}
+{% block content %}
+
+<div class="contact-form-container">
+   {% if specialist.photo %} {# `specialist` is name of object we transfer here#}
+        <img class="face-image" src="{{ specialist.photo.url }}" alt="Specialist Photo" style="max-width:200px;">
+    {% endif %}
+</div>
+
+<div class="container">
+    <h3>Client</h3>
+    <form method="post" class="form-center" enctype="multipart/form-data">
+        <table>
+            {% csrf_token %}
+<!--                {{specialist_form.as_p}} {% comment %} as_p means display elements as <p>{% endcomment %}-->
+            {{specialist_form.as_table}}
+            <tr>
+                <th>
+                    <button type="submit" name="delete_specialist">❌</button>
+                </th>
+                <td>
+                    <button type="submit" name="submit_specialist">💾</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<div class="container">
+    <h3>Contacts</h3>
+    <form method="post" class="form-center"  id="contact-form" >
+        <table>
+            {% csrf_token %}
+            {{ contact_form.as_table }}
+            <tr>
+                <th></th>
+                <td><button type="submit" name="submit_contact">💾</button></td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<div class="contact-form-container">
+    {% for contact_form in contact_form_list %}
+        <form method="post">
+            {% csrf_token %}
+            {{ contact_form.as_p }}
+            <button type="submit" name="submit_contact_delete" value="{{ contact_form.prefix }}">✖</button>
+            <button type="submit" name="submit_contact_update" value="{{ contact_form.prefix }}">💾</button>
+        </form>
+    {% endfor %}
+</div>
+
+
+{% endblock content %}
+
+{% block scripts %}
+    <script src="{% static 'core/js/specialist_detail.js' %}"></script>
+{% endblock scripts %}
+
+
+
+

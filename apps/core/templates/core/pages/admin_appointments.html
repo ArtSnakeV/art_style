@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block title %}Admin appointments{% endblock title %}
+{% block content %}
+
+<div class="container">
+    <form action="{% url 'core:appointments' %}" method="post" class="form-flex">
+        {% csrf_token %}
+        <select name="service" id="service">
+            {% for service in services %}
+                <option value="{{service.id}}">{{service.service_title}}</option>
+            {% endfor %}
+        </select>
+        <input type="datetime-local" name="time_from" placeholder="Requested starting time">
+        <input type="datetime-local" name="time_till" placeholder="Approximate time of completion">
+        <input type="text" name="appointment_details" placeholder="Details of appointment">
+        <input type="number" min="1" step="0.01" name="price" placeholder="Price">
+        <select name="client" id="client">
+            {% for client in clients %}
+                <option value="{{client.id}}">{{client.name}} {{client.surname}}</option>
+            {% endfor %}
+        </select>
+        <select name="specialist" id="specialist">
+            {% for specialist in specialists %}
+                <option value="{{specialist.id}}">{{specialist.name}} {{specialist.surname}}</option>
+            {% endfor %}
+        </select>
+<!--        <input type="checkbox" name="is_completed" value="False">-->
+        <button type="submit" name="submit_appointment_create">💾</button>
+    </form>
+</div>
+
+
+<!--<div class="container">-->
+<!--&lt;!&ndash;    <table class="form-container">&ndash;&gt;-->
+<!--&lt;!&ndash;        <tr>&ndash;&gt;-->
+<!--&lt;!&ndash;            <th>Service</th>&ndash;&gt;-->
+<!--&lt;!&ndash;            <th>Time from</th>&ndash;&gt;-->
+<!--&lt;!&ndash;            <th>Time till</th>&ndash;&gt;-->
+<!--&lt;!&ndash;            <th>Details</th>&ndash;&gt;-->
+<!--&lt;!&ndash;            <th>Price</th>&ndash;&gt;-->
+<!--&lt;!&ndash;            <th>Client</th>&ndash;&gt;-->
+<!--&lt;!&ndash;            <th>Specialist</th>&ndash;&gt;-->
+<!--&lt;!&ndash;        </tr>&ndash;&gt;-->
+<!--&lt;!&ndash;        {% for appointment in appointments %}&ndash;&gt;-->
+<!--&lt;!&ndash;            <tr>&ndash;&gt;-->
+<!--&lt;!&ndash;                <td>{{ appointment.service }}</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                <td>{{ appointment.time_from }}</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                <td>{{ appointment.time_till }}</td> &lt;!&ndash; Should be time_till instead of appointment_details &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                <td>{{ appointment.appointment_details }}</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                <td>{{ appointment.price }}</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                <td>{{ appointment.client.name }} {{ appointment.client.surname }}</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                <td>{{ appointment.specialist.name }} {{ appointment.specialist.surname }}</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                &ndash;&gt;-->
+<!--&lt;!&ndash;            </tr>&ndash;&gt;-->
+<!--&lt;!&ndash;        {% endfor %}&ndash;&gt;-->
+<!--&lt;!&ndash;    </table>&ndash;&gt;-->
+<!--    {% for appointment in appointments %}-->
+<!--        <form method="post" class="form-center" enctype="multipart/form-data">-->
+<!--            {% csrf_token %}-->
+
+<!--            {{ appointments_form.as_p }}-->
+<!--            <input type="hidden" name="appointment_id" value="{{ appointment.id }}">-->
+<!--            <select name="service" id="service">-->
+<!--                {% for service in services %}-->
+<!--                    <option value="{{service.id}}">{{appointment.service}}</option>-->
+<!--                {% endfor %}-->
+<!--            </select>-->
+<!--            <input type="datetime-local" name="time_from" placeholder="{{ appointment.time_from }}">-->
+<!--            <input type="datetime-local" name="time_till" placeholder="{{ appointment.time_till }}">-->
+<!--            <input type="text" name="appointment_details" placeholder="{{ appointment.appointment_details }}">-->
+<!--            <input type="number" min="1" step="0.01" name="price" placeholder="{{ appointment.price }}>-->
+<!--            <select name="client" id="client">-->
+<!--                {% for client in clients %}-->
+<!--                    <option value="{{client.id}}">{{ appointment.client}}</option>-->
+<!--                {% endfor %}-->
+<!--            </select>-->
+<!--            <select name="specialist" id="specialist">-->
+<!--                {% for specialist in specialists %}-->
+<!--                    <option value="{{specialist.id}}">{{ appointment.specialist}}</option>-->
+<!--                {% endfor %}-->
+<!--            </select>-->
+<!--            <button type="submit" name="submit_appointment_update" value="{{ appointment_form.id }}">💾</button>-->
+<!--            <button type="submit" name="submit_appointment_delete" value="{{ appointment_form.id }}">✖</button>-->
+<!--        </form>-->
+<!--    {% endfor %}-->
+<!--</div>-->
+
+{% for appointment in appointments %}
+<br>
+    <form method="post" class="form-center" enctype="multipart/form-data">
+              {% csrf_token %}
+        <input type="hidden" name="appointment_id" value="{{ appointment.id }}">
+
+        <!-- Service selection -->
+        <label for="service_{{ appointment.id }}">Service:</label>
+        <select name="service" id="service_{{ appointment.id }}">
+            {% for service in services %}
+                <option value="{{ service.id }}" {% if service.id == appointment.service.id %}selected{% endif %}>
+                    {{ service.service_title }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <!-- Time from -->
+        <label for="time_from_{{ appointment.id }}">Time from:</label>
+        <input type="datetime-local" name="time_from" id="time_from_{{ appointment.id }}"
+               value="{{ appointment.time_from|date:'Y-m-d\\TH:i' }}">
+
+        <!-- Time till -->
+        <label for="time_till_{{ appointment.id }}">Time till:</label>
+        <input type="datetime-local" name="time_till" id="time_till_{{ appointment.id }}"
+               value="{{ appointment.time_till|date:'Y-m-d\\TH:i' }}">
+
+        <!-- Appointment details -->
+        <label for="appointment_details_{{ appointment.id }}">Details:</label>
+        <input type="text" name="appointment_details" id="appointment_details_{{ appointment.id }}"
+               value="{{ appointment.appointment_details }}">
+
+        <!-- Price -->
+        <label for="price_{{ appointment.id }}">Price:</label>
+        <input type="number" min="1" step="0.01" name="price" id="price_{{ appointment.id }}"
+               value="{{ appointment.price }}">
+
+        <!-- Client selection -->
+        <label for="client_{{ appointment.id }}">Client:</label>
+        <select name="client" id="client_{{ appointment.id }}">
+            {% for client in clients %}
+                <option value="{{ client.id }}" {% if client.id == appointment.client.id %}selected{% endif %}>
+                    {{ client.name }} {{ client.surname }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <!-- Specialist selection -->
+        <label for="specialist_{{ appointment.id }}">Specialist:</label>
+        <select name="specialist" id="specialist_{{ appointment.id }}">
+            {% for specialist in specialists %}
+                <option value="{{ specialist.id }}" {% if specialist.id == appointment.specialist.id %}selected{% endif %}>
+                    {{ specialist.name }} {{ specialist.surname }}
+                </option>
+            {% endfor %}
+        </select>
+        <label for="is_completed_{{ appointment.id }}">Completed:</label>
+        <input type="checkbox" name="is_completed" id="is_completed_{{ appointment.id }}" {% if appointment.is_completed %}checked{% endif %}>
+        <!-- Buttons for update and delete -->
+        <button type="submit" name="submit_appointment_update" value="{{ appointment.id }}">💾</button>
+        <button type="submit" name="submit_appointment_delete" value="{{ appointment.id }}">✖</button>
+    </form>
+{% endfor %}
+
+{% endblock content %}

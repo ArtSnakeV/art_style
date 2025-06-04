@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Welcome{% endblock title %}
+
+{% block header %}{% endblock header %}
+
+{% block content %}
+<div class="center-container, full-page">
+    <div class="text-center">
+        <h1>Welcome to the ArtStyle salon.</h1>
+        <a href="{% url 'register' %}" class="start-btn">Register</a>
+        <a href="{% url 'login' %}" class="start-btn">Login</a>
+    </div>
+</div>
+
+{% endblock content %}
+
+

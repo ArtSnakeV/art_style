@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Display messages -->
+{% if messages %}
+  <ul>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+<h2>Add New User</h2>
+<form method="POST">
+  {% csrf_token %}
+  <input type="hidden" name="add_user" value="1">
+  <label>Login: <input type="text" name="new_username" required></label><br>
+  <label>Email: <input type="email" name="new_email" required></label><br>
+  <label>Password: <input type="password" name="new_password" required></label><br>
+  <label>Role:
+    <select name="new_role">
+      <option value="guest" {% if user.role == 'guest' %}selected{% endif %}>Guest</option>
+      <option value="user" {% if user.role == 'user' %}selected{% endif %}>User</option>
+      <option value="worker" {% if user.role == 'worker' %}selected{% endif %}>Worker</option>
+      <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
+    </select>
+  </label><br>
+  <button type="submit">Add User</button>
+</form>
+
+<!-- User Table -->
+<form method="POST">
+  {% csrf_token %}
+  <table border="1" cellpadding="5" cellspacing="0">
+    <thead>
+      <tr>
+        <th>Login</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+      <tr>
+        <!-- Editable login -->
+        <td>
+          <input type="text" name="username_{{ user.id }}" value="{{ user.username }}">
+        </td>
+        <!-- Editable email -->
+        <td>
+          <input type="email" name="email_{{ user.id }}" value="{{ user.email }}">
+        </td>
+        <!-- Role selection (example using groups) -->
+        <td>
+          <select name="role_{{ user.id }}">
+            <option value="guest" {% if user.role == 'guest' %}selected{% endif %}>Guest</option>
+            <option value="user" {% if user.role == 'user' %}selected{% endif %}>User</option>
+            <option value="worker" {% if user.role == 'worker' %}selected{% endif %}>Worker</option>
+            <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
+          </select>
+        </td>
+        <!-- Action buttons -->
+        <td>
+          <button type="submit" name="update_user" value="{{ user.id }}">Update</button>
+          <button type="submit" name="delete_user" value="{{ user.id }}" onclick="return confirm('Are you sure you want to delete this user?');">Delete</button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</form>
+
+
+
+{% endblock content %}

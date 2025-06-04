@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Appointments{% endblock title %}
+{% block content %}
+
+<div class="container">
+    <form action="{% url 'core:appointments' %}" method="post" class="form-flex">
+        {% csrf_token %}
+        <select name="service" id="service">
+            {% for service in services %}
+                <option value="{{service.id}}">{{service.service_title}}</option>
+            {% endfor %}
+        </select>
+        <input type="datetime-local" name="time_from" placeholder="Requested starting time">
+        <input type="datetime-local" name="time_till" placeholder="Approximate time of completion">
+        <input type="text" name="appointment_details" placeholder="Details of appointment">
+        <input type="number" min="1" step="0.01" name="price" placeholder="Price">
+        <select name="client" id="client">
+            {% for client in clients %}
+                <option value="{{client.id}}">{{client.name}} {{client.surname}}</option>
+            {% endfor %}
+        </select>
+        <select name="specialist" id="specialist">
+            {% for specialist in specialists %}
+                <option value="{{specialist.id}}">{{specialist.name}} {{specialist.surname}}</option>
+            {% endfor %}
+        </select>
+<!--        <input type="checkbox" name="is_completed" value="False">-->
+        <button type="submit" name="submit_appointment_create">💾</button>
+    </form>
+</div>
+
+
+<div class="container">
+    <table class="form-container">
+        <tr>
+            <th>Service</th>
+            <th>Time from</th>
+            <th>Time till</th>
+            <th>Details</th>
+            <th>Price</th>
+            <th>Client</th>
+            <th>Specialist</th>
+        </tr>
+        {% for appointment in appointments %}
+            <tr>
+                <td>{{ appointment.service }}</td>
+                <td>{{ appointment.time_from }}</td>
+                <td>{{ appointment.time_till }}</td> <!-- Should be time_till instead of appointment_details -->
+                <td>{{ appointment.appointment_details }}</td>
+                <td>{{ appointment.price }}</td>
+                <td>{{ appointment.client.name }} {{ appointment.client.surname }}</td>
+                <td>{{ appointment.specialist.name }} {{ appointment.specialist.surname }}</td>
+                
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock content %}

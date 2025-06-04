@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Services{% endblock title %}
+{% block content %}
+
+<div class="container">
+    <form action="{% url 'core:specialities' %}" method="post" class="form-flex">
+        {% csrf_token %}
+        <input type="text" name="speciality_name" placeholder="Speciality title">
+        <button type="submit" name="submit_speciality_create">💾</button>
+    </form>
+</div>
+
+
+<div class="container">
+    {% for speciality_form in speciality_form_list %}
+        <form method="post">
+            {% csrf_token %}
+            {{ speciality_form.as_p }}
+            <input type="hidden" name="speciality_pk" value="{{ speciality.id }}">
+            <input type="text" name="speciality_name" placeholder="Speciality title" value="{{speciality_form.speciality_name}}">
+            <button type="submit" name="submit_speciality_update" value="{{ speciality_form.id }}">💾</button>
+            <button type="submit" name="submit_speciality_delete" value="{{ speciality_form.id }}">✖</button>
+        </form>
+    {% endfor %}
+</div>
+
+{% endblock content %}
