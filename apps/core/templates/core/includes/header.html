@@ -1,26 +1,77 @@
+<!--<header>-->
+<!--    <nav class="header">-->
+<!--        <ul class="nav-left">-->
+<!--&lt;!&ndash;            <li class="header-el"><a href="/clients">Clients</a></li>&ndash;&gt;-->
+<!--            <li class="header-el"><a class="custom-link" href="{% url 'core:clients' %}">Clients</a></li>-->
+<!--&lt;!&ndash;            <li class="header-el"><a class="custom-link" href="/error">Error</a></li>&ndash;&gt;-->
+<!--            <li class="header-el"><a class="custom-link" href="{% url 'core:specialists' %}">Specialists</a></li>-->
+<!--&lt;!&ndash;            <li class="header-el"><a class="custom-link" href="/appointments">Appointments</a></li>&ndash;&gt;-->
+<!--            <li class="header-el"><a class="custom-link" href="{% url 'core:appointments' %}">Appointments</a></li>-->
+<!--&lt;!&ndash;            <li class="header-el"><a class="custom-link" href="{% url 'core:admin_appointments' %">Admin appointments</a></li>&ndash;&gt;-->
+<!--            <li class="header-el"><a class="custom-link" href="/admin_appointments">Admin appointments</a></li>-->
+<!--            <li class="header-el"><a class="custom-link" href="{% url 'core:services' %}">Services</a></li>-->
+<!--            <li class="header-el"><a class="custom-link" href="{% url 'core:specialities' %}">Specialities</a></li>-->
+<!--            <li class="header-el"><a class="custom-link" href="{% url 'core:user_management' %}">Users</a></li>-->
+<!--            <li class="header-el"><a class="custom-link" href="{% url 'register' %}">Register</a></li>-->
+<!--            <li class="header-el"><a class="custom-link" href="{% url 'login' %}">Login</a></li>-->
+<!--            <li style="clear: both;"></li>-->
+<!--        </ul>-->
+<!--        <ul class="nav-right">-->
+<!--            <li>-->
+<!--                <form action  = "{% url 'logout' %}" method = "post">-->
+<!--                    {% csrf_token %}-->
+<!--                    <button type="submit" class="button-logout">Logout</button>-->
+<!--                </form>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </nav>-->
+<!--</header>-->
+
 <header>
-    <nav class="header">
-        <ul class="nav-left">
-<!--            <li class="header-el"><a href="/clients">Clients</a></li>-->
-            <li class="header-el"><a class="custom-link" href="{% url 'core:clients' %}">Clients</a></li>
-<!--            <li class="header-el"><a class="custom-link" href="/error">Error</a></li>-->
-            <li class="header-el"><a class="custom-link" href="/specialists">Specialists</a></li>
-            <li class="header-el"><a class="custom-link" href="/appointments">Appointments</a></li>
-            <li class="header-el"><a class="custom-link" href="/admin_appointments">Admin appointments</a></li>
-            <li class="header-el"><a class="custom-link" href="{% url 'core:services' %}">Services</a></li>
-            <li class="header-el"><a class="custom-link" href="{% url 'core:specialities' %}">Specialities</a></li>
-            <li class="header-el"><a class="custom-link" href="{% url 'core:user_management' %}">Users</a></li>
-            <li class="header-el"><a class="custom-link" href="{% url 'register' %}">Register</a></li>
-            <li class="header-el"><a class="custom-link" href="{% url 'login' %}">Login</a></li>
-            <li style="clear: both;"></li>
-        </ul>
-        <ul class="nav-right">
-            <li>
-                <form action  = "{% url 'logout' %}" method = "post">
-                    {% csrf_token %}
-                    <button type="submit" class="button-logout">Logout</button>
-                </form>
-            </li>
-        </ul>
-    </nav>
+  <nav class="header">
+    <ul class="nav-left">
+      {% if request.user.role == 'admin' %}
+        <li class="header-el"><a class="custom-link" href="{% url 'core:clients' %}">Clients</a></li>
+        <li class="header-el"><a class="custom-link" href="{% url 'core:specialists' %}">Specialists</a></li>
+        <li class="header-el"><a class="custom-link" href="/admin_appointments">Admin appointments</a></li>
+        <li class="header-el"><a class="custom-link" href="{% url 'core:services' %}">Services</a></li>
+        <li class="header-el"><a class="custom-link" href="{% url 'core:specialities' %}">Specialities</a></li>
+        <li class="header-el"><a class="custom-link" href="{% url 'core:user_management' %}">Users</a></li>
+        <li class="header-el"><a class="custom-link" href="{% url 'register' %}">Register</a></li>
+        <li class="header-el"><a class="custom-link" href="{% url 'login' %}">Login</a></li>
+      {% elif request.user.role == 'user' %}
+        <li class="header-el"><a class="custom-link" href="{% url 'core:appointments' %}">Appointments</a></li>
+        <li class="header-el"><a class="custom-link" href="{% url 'register' %}">Register</a></li>
+        <li class="header-el"><a class="custom-link" href="{% url 'login' %}">Login</a></li>
+      {% elif request.user.role == 'worker' %}
+        <li class="header-el"><a class="custom-link" href="{% url 'core:appointments' %}">Appointments</a></li>
+        <li class="header-el"><a class="custom-link" href="{% url 'core:clients' %}">Clients</a></li>
+        <li class="header-el"><a class="custom-link" href="{% url 'login' %}">Login</a></li>
+        <li class="header-el"><a class="custom-link" href="{% url 'logout' %}">Logout</a></li>
+        <li class="header-el"><a class="custom-link" href="{% url 'core:about' %}">About</a></li>
+        <li class="header-el"><a class="custom-link" href="{% url 'core:welcome' %}">Welcome</a></li>
+      {% elif request.user.role == 'guest' %}
+        <li class="header-el"><a class="custom-link" href="{% url 'core:welcome' %}">Welcome</a></li>
+        <li class="header-el"><a class="custom-link" href="{% url 'core:info' %}">Info</a></li>
+        <li class="header-el"><a class="custom-link" href="{% url 'login' %}">Login</a></li>
+        <li class="header-el"><a class="custom-link" href="{% url 'register' %}">Register</a></li>
+        <li class="header-el">
+          <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="button-logout">Logout</button>
+          </form>
+        </li>
+      {% endif %}
+    </ul>
+    <ul class="nav-right">
+      {% if user.is_authenticated %}
+        <li>
+          <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="button-logout">Logout</button>
+          </form>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
 </header>

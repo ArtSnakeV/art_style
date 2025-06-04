@@ -1,245 +1,257 @@
-*{
+
+Copy
+/* Global styles */
+* {
     font-family: Roboto, serif;
-    font-size: 18px;
+    font-size: 1.3rem; /* 18px equivalent */
 }
-body{
-    padding: 3px;
+body {
+    padding: 0.2rem; /* 3px approx */
     background-image: url('../media/background.jpg');
+    background-size: cover;
+    background-position: center;
 }
-.container{
-    margin: 20px 0px;
+.container {
+    margin: 1.25rem 0; /* 20px approx */
 }
 
-
-table{
+/* Table styles */
+table {
     width: 100%;
     border-collapse: collapse;
-    font-size: small;
+    font-size: 1.2rem; /* small */
     text-align: center;
-    margin-top: 20px;
+    margin-top: 1.25rem; /* 20px */
 }
-table th{
+table th {
     font-weight: 400;
-    padding: 5px;
+    padding: 0.3rem; /* 5px */
     background: #CCFFE5;
     border: 1px solid #d0d0d0;
 }
-table td{
+table td {
     border: 1px solid #ddd;
-    padding: 5px;
+    padding: 0.3rem; /* 5px */
 }
-table tr td:first-child, table tr th:first-child{
+table tr td:first-child,
+table tr th:first-child {
     border-left: none;
 }
-table tr td:first-child, table tr th:last-child{
+table tr td:last-child,
+table tr th:last-child {
     border-right: none;
 }
 
-
-.art_style{
-  color: white;
-  padding: 10px;
-  font-size: 1.5em;
-  font-weight: bold;
-  font-style: oblique;
-  
-  background: rgb(0, 204, 102);
-  margin-top: 20px;
-  margin-left: auto;
-  margin-right: auto;
-  -webkit-transition: background-color 2s ease-out;
-  -moz-transition: background-color 2s ease-out;
-  -o-transition: background-color 2s ease-out;
-  transition: background-color 2s ease-out;
-   border-radius: 5px;
-}
-
-.art_style:hover {
-  background-color: rgb(30, 107, 30);
-  cursor: pointer;
-   border-radius: 7px;
-}
-
-/* Style for the link */
-  .custom-link {
-    color: gray;             /* Grey text color */
-    text-decoration: none;   /* Remove underline */
-    font-family: Arial, sans-serif; /* Nice clean font */
-    font-size: 1.3e;       /* Adjust font size as needed */
-    transition: color 0.3s ease; /* Smooth color transition */
-    font-weight: bolder;
-    cursor: pointer;       /* Pointer cursor on hover */
-  }
-
-  /* Change color to white on hover */
-  .custom-link:hover {
+/* Art style */
+.art_style {
     color: white;
-  }
+    padding: 0.625rem; /* 10px */
+    font-size: 1.5em;
+    font-weight: bold;
+    font-style: oblique;
+    background: rgb(0, 204, 102);
+    margin-top: 1.25rem; /* 20px */
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 0.3125rem; /* 5px */
+    transition: background-color 2s ease-out;
+}
+.art_style:hover {
+    background-color: rgb(30, 107, 30);
+    cursor: pointer;
+    border-radius: 0.4375rem; /* 7px */
+}
 
-  .contact-form-container{
+/* Custom link */
+.custom-link {
+    color: gray;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+    font-size: 1.3em; /* scaling with rem if needed */
+    transition: color 0.3s ease;
+    font-weight: bolder;
+    cursor: pointer;
+}
+.custom-link:hover {
+    color: white;
+}
+
+/* Contact form container */
+.contact-form-container {
     text-align: center;
-  }
+}
 
-
-
-  /* Reset list styles for ul.nav-left and ul.nav-right */
+/* Navigation lists */
 .nav-left,
 .nav-right {
-  list-style: none; /* Remove bullets/dots */
-  margin: 0;        /* Remove default margin */
-  padding: 0;       /* Remove default padding */
-  display: flex;    /* Use Flexbox for layout */
-  align-items: center; /* Vertically align items */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
 }
-
-/* For the header container, use Flexbox to separate left and right menus */
 .header {
-  display: flex;
-  justify-content: space-between; /* Space between left and right menus */
-  align-items: center;             /* Vertically center items */
-  background: #E5E4E2;
-  margin: 0 auto;
-  padding: 10px;
-  border-radius: 7px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #E5E4E2;
+    margin: 0 auto;
+    padding: 0.625rem; /* 10px */
+    border-radius: 0.4375rem; /* 7px */
 }
-
-/* Style individual list items in left menu */
 .nav-left .header-el {
-  margin-right: 17px;
+    margin-right: 1.0625rem; /* 17px */
 }
-
 .nav-left .header-el:last-child {
-  margin-right: 0; /* Remove margin from last item */
+    margin-right: 0;
 }
-
-/* Style individual list items in right menu (if needed) */
 .nav-right {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
-
-/* Optional: Add spacing for items in right menu */
 .nav-right li {
-  margin-left: 10px;
+    margin-left: 0.625rem; /* 10px */
 }
 
-/* Style for links */
-.custom-link {
-  color: gray;             /* Grey text color */
-  text-decoration: none;   /* Remove underline */
-  font-family: Arial, sans-serif; /* Nice clean font */
-  font-size: 1.3em;        /* Adjust font size (corrected syntax) */
-  transition: color 0.3s ease; /* Smooth color transition */
-  font-weight: bolder;
-  cursor: pointer;         /* Pointer cursor on hover */
+/* Responsive header */
+@media(max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .nav-left,
+    .nav-right {
+        flex-direction: column;
+    }
+    .nav-left .header-el,
+    .nav-right li {
+        margin: 0.5rem 0;
+    }
 }
 
-/* Hover effect for links */
-.custom-link:hover {
-  color: white;
+/* Face image */
+.face-image {
+    margin: 0.625rem; /* 10px */
+    border-radius: 0.5rem; /* 8px */
+    max-width: 100%;
+    height: auto;
 }
 
-/* Optional: Make the header responsive on smaller screens */
-@media (max-width: 768px) {
-  .header {
-    flex-direction: column; /* Stack menus vertically */
-    align-items: flex-start; /* Align to start */
-  }
-  .nav-left,
-  .nav-right {
-    flex-direction: column;
-  }
-  /* Add spacing between stacked items if needed */
-  .nav-left .header-el,
-  .nav-right li {
-    margin: 8px 0;
-  }
-}
-
-.face-image{
-    margin: 10px;
-    border-radius: 8px;
-}
-
-.account-form-container{
+/* Account form container */
+.account-form-container {
     text-align: center;
 }
 
-/* Login page menu */
-login-menu{
-    padding: 20px;
+/* Login menu (correct selector) */
+.login-menu {
+    padding: 1.25rem; /* 20px */
     background-color: #f0f0f0;
-    border-radius: 8px;
+    border-radius: 0.5rem; /* 8px */
 }
+
+/* Full page centering */
 .full-page {
-  display: flex; /* Enable Flexbox */
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  height: 70vh; /* Full viewport height */
-  margin: 0; /* Remove default margin if any */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+    margin: 0;
 }
-.text-center{
+
+/* Text center */
+.text-center {
     text-align: center;
 }
 
-
-
-/* CSS */
-/*
+/* Buttons */
 button {
-  background-color: #111827;
-  border: 1px solid transparent;
-  border-radius: .75rem;
-  box-sizing: border-box;
-  color: #FFFFFF;
-  cursor: pointer;
-  flex: 0 0 auto;
-  font-family: "Inter var",ui-sans-serif,system-ui,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-  font-size: 1.125rem;
-  font-weight: 600;
-  line-height: 1.5rem;
-  padding: .75rem 1.2rem;
-  text-align: center;
-  text-decoration: none #6B7280 solid;
-  text-decoration-thickness: auto;
-  transition-duration: .2s;
-  transition-property: background-color,border-color,color,fill,stroke;
-  transition-timing-function: cubic-bezier(.4, 0, 0.2, 1);
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  width: auto;
+    background-color: #50C878;
+    border: 1px solid transparent;
+    border-radius: 0.75rem; /* 12px */
+    box-sizing: border-box;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-family: "Inter var", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-size: 1.125rem; /* 18px */
+    font-weight: 600;
+    line-height: 1.3rem;
+    padding: 0.75rem 1.2rem;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.2s cubic-bezier(.4, 0, 0.2, 1);
+    user-select: none;
+    touch-action: manipulation;
+    width: auto;
+    margin: 0.5rem 0; /* vertical spacing for buttons */
 }
-
 button:hover {
-  background-color: #374151;
+    background-color: #374151; /* darker on hover */
 }
-
 button:focus {
-  box-shadow: none;
-  outline: 2px solid transparent;
-  outline-offset: 2px;
+    box-shadow: none;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
 }
 
-@media (min-width: 768px) {
-  button {
-    padding: .75rem 1.5rem;
-  }
-}*/
-
-
-a:link, a:visited {
-  background-color: white;
-  color: black;
-  border: 2px solid green;
-  padding: 5px 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  border-radius: 5px;
+/* Links (general) */
+a:link,
+a:visited {
+    background-color: white;
+    color: black;
+    border: 2px solid green;
+    padding: 0.3rem 0.6rem; /* 5px/10px scaled */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 0.3125rem; /* 5px */
+}
+a:hover,
+a:active {
+    background-color: green;
+    color: white;
 }
 
-a:hover, a:active {
-  background-color: green;
-  color: white;
+/* Form styles - spacing between fields */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* space between fields, responsive */
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea,
+select {
+    padding: 0.75rem;
+    font-size: 1rem; /* scalable */
+    border: 1px solid #ccc;
+    border-radius: 0.375rem; /* 6px */
+    width: 100%;
+    box-sizing: border-box;
+}
+@media(max-width: 768px) {
+    form {
+        padding: 0.5rem;
+        max-width: 90%;
+    }
+}
+
+/* Additional form spacing if needed */
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* space between label and input */
+}
+
+/* Optional: Make font sizes responsive */
+@media(max-width: 768px) {
+    * {
+        font-size: 1rem; /* default for mobile */
+    }
+}
+*:not(nav *) {
+    font-size: calc(1.3rem);
 }
