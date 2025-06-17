@@ -22,10 +22,11 @@ urlpatterns = [
 
     path('about/', about_project, name='about_project'),
 
-    path('about/core/', about_core),
+    path('about/core/', about_core, name='about'),
 
     # path('', RedirectView.as_view(pattern_name='core:clients', permanent=False)),
-    path('', RedirectView.as_view(pattern_name='core:appointments', permanent=False)),
+    path('', RedirectView.as_view(pattern_name='core:appointments', permanent=False), name='home'),
+
 
     # path('clients/', login_required(views.clients), name='clients'), # core:clients
     path('clients/', views.clients, name='clients'),  # core:clients

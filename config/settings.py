@@ -146,7 +146,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #LOGIN
 from apps import users
 AUTH_USER_MODEL = 'users.CustomUser'
-#LOGIN_URL = 'login'
+# LOGIN_URL = 'login'
 LOGIN_URL = '/accounts/login/' # Вибираємо адресу, або `name` який буде використовуватись для логіна
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/welcome/'

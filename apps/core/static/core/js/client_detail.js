@@ -6,10 +6,10 @@ document.addEventListener("DOMContentLoaded", function(){
     console.log(url)
 
 //    form.onsubmit = function(){}
-    form.addEventListener("submit", async function(e){
+    form.addEventListener("submit_address", async function(e){
         e.preventDefault()
         const formData = new FormData(form)
-        const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value
+        const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
         try{
             const response = await fetch(url, {
                 method: "POST",
@@ -25,6 +25,30 @@ document.addEventListener("DOMContentLoaded", function(){
 //            console.log(data)
 //            alert(data)
             document.getElementById("address-response").innerText = data.message || 'Success!'
+        } catch(error){
+            console.error(error)
+            document.getElementById("address-response").innerText = "Something went wrong"
+        }
+    })
+    form.addEventListener("delete_address", async function(e){
+        e.preventDefault()
+        const formData = new FormData(form)
+        const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
+        try{
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                   'X-CSRFToken': csrfToken
+                },
+                body: formData,
+            })
+            if(!response.ok){
+                throw new Error("Server Error")
+            }
+            const data = await response.json()
+//            console.log(data)
+//            alert(data)
+            document.getElementById("address-response").innerText = data.message || 'Address deleted!'
         } catch(error){
             console.error(error)
             document.getElementById("address-response").innerText = "Something went wrong"

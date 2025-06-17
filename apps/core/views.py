@@ -130,7 +130,7 @@ class ClientDetailUpdateView(views.View):
             return redirect('core:clients')  # redirect to clients list or elsewhere
 
         if 'delete_address' in request.POST:
-            if address:
+            if client.address:
                 address.delete()
             return redirect('core:client_detail', pk=pk)
 
