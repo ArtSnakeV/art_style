@@ -15,7 +15,7 @@ EXEMPT_URLS = [
     # 'user:admin_appointments',
     # 'user:services',
     # 'user:specialist_details',
-    # 'core:about_project',
+    'core:about_project',
     # 'worker:clients',
     # 'worker:client_detail',
     # 'worker:services',

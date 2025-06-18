@@ -32,6 +32,7 @@ urlpatterns = [
 
     path('accounts/', include('apps.users.urls')), # Префікс адреси accounts/ для додатку users
     path('welcome/', views.welcome, name='welcome'),
+    path('about/', views.welcome, name='about_project'),
 ]
 
 #!!!!! MEDIA
