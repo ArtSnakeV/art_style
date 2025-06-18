@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 
 from django.conf.global_settings import STATICFILES_DIRS, AUTH_USER_MODEL, LOGIN_REDIRECT_URL, LOGOUT_REDIRECT_URL
+from django.urls import reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -147,6 +148,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 from apps import users
 AUTH_USER_MODEL = 'users.CustomUser'
 # LOGIN_URL = 'login'
-LOGIN_URL = '/accounts/login/' # Вибираємо адресу, або `name` який буде використовуватись для логіна
-LOGIN_REDIRECT_URL = '/'
+# LOGIN_URL = '/accounts/login/' # Вибираємо адресу, або `name` який буде використовуватись для логіна
+LOGIN_URL = '/welcome/'
+LOGIN_REDIRECT_URL = '/appointments/'
 LOGOUT_REDIRECT_URL = '/welcome/'

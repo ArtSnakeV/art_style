@@ -7,7 +7,7 @@ EXEMPT_URLS = [
     'login',
     'logout',
     'register',
-    'welcome',
+    'core:welcome',
     # 'admin:login',
     # 'admin:logout',
     # 'admin:index',

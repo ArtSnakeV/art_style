@@ -20,6 +20,8 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from apps.core import views
+
 urlpatterns = [
     # http://localhost:8000/admin/
     path('admin/', admin.site.urls),
@@ -29,6 +31,7 @@ urlpatterns = [
                 # також тут може бути псевдонім, який обробляє сторінку
 
     path('accounts/', include('apps.users.urls')), # Префікс адреси accounts/ для додатку users
+    path('welcome/', views.welcome, name='welcome'),
 ]
 
 #!!!!! MEDIA

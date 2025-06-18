@@ -39,6 +39,7 @@
         <li class="header-el"><a class="custom-link" href="{% url 'core:user_management' %}">Users</a></li>
         <li class="header-el"><a class="custom-link" href="{% url 'register' %}">Register</a></li>
         <li class="header-el"><a class="custom-link" href="{% url 'login' %}">Login</a></li>
+        <li class="header-el"><a class="custom-link" href="{% url 'core:welcome' %}">Welcome</a></li>
       {% elif request.user.role == 'user' %}
         <li class="header-el"><a class="custom-link" href="{% url 'core:appointments' %}">Appointments</a></li>
         <li class="header-el"><a class="custom-link" href="{% url 'register' %}">Register</a></li>
